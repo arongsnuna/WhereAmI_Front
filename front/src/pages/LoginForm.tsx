@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import "./global.css";
-import wherelogo from './assets/where.png'
+import "../global.css";
+import wherelogo from '../assets/where.png'
 
 function LoginForm() {
   const [id, setId] = useState("");
@@ -14,23 +14,23 @@ function LoginForm() {
         </a>
         <div className="text-center md:flex md:flex-col md:items-center md:justify-center">
           <div className="flex flex-col">
-            <input 
-              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200" 
-              name='id' 
-              type='text' 
-              id='id' 
-              placeholder='아이디' 
-              value={id} 
+            <input
+              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
+              name='id'
+              type='text'
+              id='id'
+              placeholder='아이디'
+              value={id}
               onChange={(e) => setId(e.target.value)}/>
-            <input 
-              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200" 
-              name='password' 
-              type='password' 
-              id='password' 
-              placeholder='비밀번호' 
-              value={password} 
+            <input
+              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
+              name='password'
+              type='password'
+              id='password'
+              placeholder='비밀번호'
+              value={password}
               onChange={(e) => setPassword(e.target.value)}/>
-            <button 
+            <button
               className="mx-auto mt-1 mb-3 w-40 text-center rounded-lg bg-slate-400" >
               로그인
             </button>
