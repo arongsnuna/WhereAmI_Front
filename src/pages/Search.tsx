@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import sampleImage from '/images/sampleimg.jpg';
+import Map from '../components/maps';
 
 const Search = () => {
     const handleLogin = () => {
@@ -53,9 +54,9 @@ const Search = () => {
                         <h2 className="w-full text-center">경북궁</h2>
                         <p className="w-full text-center">어쩌구 저쩌구</p>
                     </div>
-                    <p className="col-span-1">
-                        지도
-                    </p>
+                    <div className='w-full h-full'>
+                        <Map />
+                    </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 items-start mt-4">
                     <div className="border border-gray-200 rounded flex flex-col items-center p-4 overflow-hidden">

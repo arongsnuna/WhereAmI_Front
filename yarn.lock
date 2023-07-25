@@ -467,10 +467,20 @@
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.7.2.tgz#cba1cf0a04bc04cb66027c51fa600e9cbc388bc8"
   integrity sha512-7Lcn7IqGMV+vizMPoEl5F0XDshcdDYtMI6uJLQdQz5CfZAwy3vvGKYSUk789qndt5dEC4HfSjviSYlSoHGL2+A==
 
+"@types/googlemaps@^3.43.3":
+  version "3.43.3"
+  resolved "https://registry.yarnpkg.com/@types/googlemaps/-/googlemaps-3.43.3.tgz#70cf962154a160fe78bcd69d6ccc296dd9175b1f"
+  integrity sha512-ZWNoz/O8MPEpiajvj7QiqCY8tTLFNqNZ/a+s+zTV58wFVNAvvqV4bdGfnsjTb5Cs4V6wEsLrX8XRhmnyYJ2Tdg==
+
 "@types/json-schema@^7.0.9":
   version "7.0.12"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.12.tgz#d70faba7039d5fca54c83c7dbab41051d2b6f6cb"
   integrity sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==
+
+"@types/node@^20.4.4":
+  version "20.4.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.4.tgz#c79c7cc22c9d0e97a7944954c9e663bcbd92b0cb"
+  integrity sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==
 
 "@types/prop-types@*":
   version "15.7.5"
@@ -1171,6 +1181,11 @@ globby@^11.1.0:
     ignore "^5.2.0"
     merge2 "^1.4.1"
     slash "^3.0.0"
+
+google-maps-react@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/google-maps-react/-/google-maps-react-2.0.6.tgz#0473356207ab6b47227b393b89e4b83f6eab06da"
+  integrity sha512-M8Eo9WndfQEfxcmm6yRq03qdJgw1x6rQmJ9DN+a+xPQ3K7yNDGkVDbinrf4/8vcox7nELbeopbm4bpefKewWfQ==
 
 graphemer@^1.4.0:
   version "1.4.0"
