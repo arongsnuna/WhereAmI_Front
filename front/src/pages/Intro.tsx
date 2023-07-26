@@ -59,15 +59,9 @@ const Search = () => {
                             </div>
                         <button
                             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-2"
-                            >이미지 업로드</button>
-                </div>
-                <div className='flex flex-col items-center justify-center'>
-                    <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-2"
-                        onClick={handleButtonClick}
-                    >
-                        검색
-                    </button>
+                            onClick={handleButtonClick}
+                            >검색
+                        </button>
                 </div>
                 </div>
             </div>
