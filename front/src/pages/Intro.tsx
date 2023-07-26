@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
-import wherelogo from '../assets/where.png'
+import wherelogo from '../../public/images/where.png'
 import React from 'react';
 
 const Search = () => {
@@ -19,7 +19,7 @@ const Search = () => {
         try {
           const formData = new FormData();
           formData.append('file', file);
-          const response = await postData('/landmark/upload', formData, config);
+          const response = await postData('/image', formData, config);
           console.log(response.result);
 
           // 파일 업로드 후에 선택된 파일 입력 요소를 초기화
