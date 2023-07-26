@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import sampleImage from '/images/sampleimg.jpg';
-import Map from '../components/maps';
+import Map from '../components/Main';
 
 const Search = () => {
     const handleLogin = () => {
