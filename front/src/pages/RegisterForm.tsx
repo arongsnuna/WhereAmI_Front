@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import "../global.css";
-import wherelogo from '../../public/images/where.png'
+import wherelogo from '../assets/where.png'
 
 function App() {
   const [email, setEmail] = useState("");

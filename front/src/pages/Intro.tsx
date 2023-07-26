@@ -2,11 +2,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
-import wherelogo from '../../public/images/where.png'
+import wherelogo from '../assets/where.png'
 import React from 'react';
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from 'react-query';
 
 const Search = () => {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const handleLogin = () => {
 
     };
@@ -22,10 +26,10 @@ const Search = () => {
           const response = await postData('/image', formData, config);
           console.log(response.result);
 
-          // 파일 업로드 후에 선택된 파일 입력 요소를 초기화
-          if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-          }
+          // 서버에서 받은 데이터를 쿼리 키로 캐싱합니다.
+          queryClient.setQueryData('landmark', response.landmark);
+          queryClient.setQueryData('nearByLandmarks', response.nearByLandmarks);
+          navigate('/search');
         } catch (err) {
           console.log(err);
         }
