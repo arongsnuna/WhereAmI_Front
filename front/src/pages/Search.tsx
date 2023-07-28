@@ -8,6 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { postData } from '../api/index';
 import MapContainer from '../components/MapContainer';
 
+interface Landmark {
+  name: string;
+  imagePath: string;
+  address: string;
+}
+
+interface APIResponse {
+  landmark: Landmark;
+  nearByLandmarks: Landmark[];
+}
 
 const Search = () => {
     const { data: landmark} = useQuery('landmark');

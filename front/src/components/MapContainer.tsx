@@ -11,6 +11,7 @@ declare const kakao: any;
 interface MapContainerProps {
   name: string;
   address: string;
+  landmark: any;
 }
 
 const MapContainer: React.FC<MapContainerProps> = ({ name, address }) => {
