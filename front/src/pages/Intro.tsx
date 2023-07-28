@@ -1,4 +1,3 @@
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
@@ -6,6 +5,7 @@ import wherelogo from '../assets/where.png'
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from 'react-query';
+import MapContainer from '../components/MapContainer';
 
 const Search = () => {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
