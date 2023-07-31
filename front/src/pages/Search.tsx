@@ -11,13 +11,8 @@ const Search = () => {
     const config = {
         headers: { 'Content-Type': 'multipart/form-data' },
     };
-    const queryClient = useQueryClient();
-    const [uploadedFile, setUploadedFile] = useState(null);
-    const { data } = useQuery(['landmark', uploadedFile], async()=>{
-        await postData('/image',uploadedFile, config);
-    })
-    const landmark = queryClient.getQueryData(['landmark',uploadedFile]).landmark;
-    const nearByLandmarks =  queryClient.getQueryData(['landmark',uploadedFile]).nearByLandmarks;
+    const [landmark, setLandmark] = useState(null);
+    const [nearByLandmarks, setNearByLandmarks] = useState(null);
     const handleLogin = () => {
 
     };
@@ -26,10 +21,12 @@ const Search = () => {
         try {
           const formData = new FormData();
           formData.append('file', file);
-          console.log(data)
-
+          const response = await postData('/image', formData, config);
+          await setLandmark(response.landmark);
+          await setNearByLandmarks(response.nearByLandmarks);
         } catch (err) {
           console.log(err);
+          alert(err);
         }
     };
     const handleButtonClick = async()=>{
@@ -66,7 +63,7 @@ const Search = () => {
                         </button>
                     </div>
                 </div>
-                {uploadedFile && <LandmarkResult landmark={landmark} nearbyLandmarks={nearByLandmarks}/>}
+                {landmark && <LandmarkResult landmark={landmark} nearByLandmarks={nearByLandmarks}/>}
             </div>
         </div>
     )

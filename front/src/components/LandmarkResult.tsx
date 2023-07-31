@@ -1,13 +1,17 @@
 import React from 'react';
 import MapContainer from '../components/MapContainer';
-import { Landmark } from '../interface/types';
 
+interface Landmark {
+  name: string;
+  address: string;
+  imagePath: string;
+}
 interface LandmarkResultProps {
   landmark: Landmark;
-  nearbyLandmarks: Landmark[];
+  nearByLandmarks: Landmark[];
 }
 
-const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearbyLandmarks }) => {
+const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmarks }) => {
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start mt-4">
@@ -23,10 +27,10 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearbyLandmar
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        {nearbyLandmarks.map((land) => (
+        {nearByLandmarks.map((land) => (
           <div className="border border-gray-200 rounded flex flex-col items-center p-4 overflow-hidden" key={land.id}>
             <div className="w-full h-2/3">
-              <img src={land.imagePath} alt="sample" style={{ width: '100%', height: 'auto' }} />
+              <img src={land.imagePath} alt="sample" style={{ width: '80%', height: 'auto' }} />
             </div>
             <h2>{land.name}</h2>
             <p>{land.address}</p>
