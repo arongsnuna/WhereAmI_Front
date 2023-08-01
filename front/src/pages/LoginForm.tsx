@@ -1,10 +1,28 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react';
+import { useMutation } from 'react-query';
+import { postData } from '../api/index';
 import "../global.css";
-import wherelogo from '../assets/where.png'
+import wherelogo from '../assets/where.png';
+import { UserContext } from '../context/context';
 
 function LoginForm() {
-  const [id, setId] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const { dispatch } = useContext(UserContext);
+
+  const loginMutation = useMutation(async () => {
+    const data = await postData('/users/login', { userName, password });
+    dispatch({ type: 'login_success', payload: data.user });
+    return data;
+  });
+
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    loginMutation.mutate();
+  }
+
+
 
   return (
     <>
@@ -20,8 +38,8 @@ function LoginForm() {
               type='text'
               id='id'
               placeholder='아이디'
-              value={id}
-              onChange={(e) => setId(e.target.value)}/>
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}/>
             <input
               className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
               name='password'
