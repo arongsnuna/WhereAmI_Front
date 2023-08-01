@@ -1,43 +1,41 @@
 import React, { useEffect } from 'react';
+import { MapContainerProps, GeocoderResult } from '../types';
+
 
 declare global {
-  interface Window {
-    kakao: any;
-  }
-}
-// 해당 파일의 가장 위에 추가합니다.
-declare const kakao: any;
+    interface Window {
+        kakao: any;
+        }
+    }
 
-interface MapContainerProps {
-  name: string;
-  address: string;
-  landmark: any;
-}
+  declare const kakao: any;
+  
+const MapContainer: React.FC<MapContainerProps> = ({ name, address, landmark }) => {
 
-const MapContainer: React.FC<MapContainerProps> = ({ name, address }) => {
+  
 
   useEffect(() => {
     const container = document.getElementById('myMap');
     const options = {
-      center: new kakao.maps.LatLng(35.12, 129.1),
+      center: new window.kakao.maps.LatLng(35.12, 129.1),
       level: 5
     };
     // 지도를 생성합니다.
-    const map = new kakao.maps.Map(container, options);
+    const map = new window.kakao.maps.Map(container, options);
     // 주소-좌표 변환 객체를 생성합니다.
-    const geocoder = new kakao.maps.services.Geocoder();
+    const geocoder = new window.kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다..
     geocoder.addressSearch(address, function (result: kakao.maps.services.GeocoderResult[], status: kakao.maps.services.Status) {
       // 정상적으로 검색이 완료됐으면
-      if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+      if (status === window.kakao.maps.services.Status.OK) {
+        const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
         // 결과값으로 받은 위치를 마커로 표시합니다
-        const marker = new kakao.maps.Marker({
+        const marker = new window.kakao.maps.Marker({
           map: map, // 여기서 map은 지도 인스턴스가 있어야 합니다.
           position: coords
         });
         // 인포윈도우로 장소에 대한 설명을 표시합니다
-        const infowindow = new kakao.maps.InfoWindow({
+        const infowindow = new window.kakao.maps.InfoWindow({
           content: `<div style="width:150px;color:black;text-align:center;padding:6px 0;">${name}</div>`
         });
         infowindow.open(map, marker);
