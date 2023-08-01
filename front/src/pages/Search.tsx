@@ -3,8 +3,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
 import wherelogo from '../assets/where.png'
 import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
 import LandmarkResult from '../components/LandmarkResult';
+import "../global.css";
 
 const Search = () => {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -37,34 +37,55 @@ const Search = () => {
     }
 
     return (
-        <div className='h-screen flex flex-col justify-center items-center'>
-            <header className='absolute top-0 right-0 py-4 px-6 z-50'>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onClick={handleLogin}>
-                    로그인
-                </button>
-            </header>
+        <div>
+        {landmark &&
+            <div className='flex'>
+                <div className='w-1/5'></div>
+                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>여긴 어디?</div>
+                <div className='w-1/5 flex justify-end pt-5 pr-5'>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                            로그인
+                        </button>
+                </div>
+            </div>
+        }
+        {!landmark &&
+            <div>
+                <div className='w-full flex justify-end pt-5 pr-5'>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                            로그인
+                        </button>
+                </div>
+                <a className='h-full w-full mb-4 flex items-center justify-center'><img src={wherelogo} className='h-full ' alt="Vite logo" /></a>
+            </div>
+        }
+        <div className='flex'>
 
+        <div className='w-1/6'> </div>
+        <div className='m-4 w-4/6 flex flex-col justify-center items-center'>
             <div className='flex flex-col items-center justify-center'>
                 <div>
-                    <a className='text-2xl mb-4 text-center'><img src={wherelogo} className="logo sm:mx-auto" alt="Vite logo" /></a>
-                        <div className='w-full flex justify-center'>
-                            <div className='relative border border-gray-200 rounded-lg mt-2 mr-2 inline-block'>
-                                <FontAwesomeIcon icon={faSearch} className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <div className='w-full flex justify-center my-auto '>
+                            <div className='flex border border-gray-200 rounded-lg mr-2 '>
+                                <FontAwesomeIcon icon={faSearch} className="flex mx-auto ml-3 relative top-1/2 transform -translate-y-1/2 text-gray-400" />
+
                                 <input
-                                    className="pl-8 py-2 pr-4 bg-transparent w-full outline-none"
+                                    className="pl-5 py-2 pr-4 bg-transparent w-full outline-none text-center text-xs sm:text-base"
                                     type="file" accept='image/*'
                                     ref={fileInputRef}
                                 />
                             </div>
-                        <button
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-2"
-                            onClick={handleButtonClick}
-                            >검색
-                        </button>
+                            <button
+                                className="flex bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-3 rounded-lg my-auto text-xs sm:text-base"
+                                onClick={handleButtonClick}
+                                >검색
+                            </button>
                     </div>
                 </div>
-                {landmark && <LandmarkResult landmark={landmark} nearByLandmarks={nearByLandmarks}/>}
             </div>
+        </div>
+        </div >
+        {landmark && <LandmarkResult landmark={landmark} nearByLandmarks={nearByLandmarks}/>}
         </div>
     )
 }

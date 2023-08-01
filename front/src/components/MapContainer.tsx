@@ -48,8 +48,8 @@ const MapContainer: React.FC<MapContainerProps> = ({ name, address }) => {
 
   return (
     <div id='myMap' style={{
-      width: '200px',
-      height: '200px'
+      width: '100%',
+      height: "300px",
     }}></div>
   );
 }
