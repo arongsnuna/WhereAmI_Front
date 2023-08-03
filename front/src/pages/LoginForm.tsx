@@ -8,14 +8,14 @@ function LoginForm() {
 
   return (
     <>
-      <div className='flex flex-col md:flex-row md:items-center md:justify-center'>
-        <a href="./" className="items-center">
-          <img src={wherelogo} className="logo sm:mx-auto" alt="Vite logo" />
-        </a>
+    <div className='flex flex-col items-center justify-center'>
+      <a href="./" className="md-8">
+        <img src={wherelogo} className="logo w-20 h-27 mt-8 mb-14 mx-auto" alt="Vite logo" />
+      </a>
         <div className="text-center md:flex md:flex-col md:items-center md:justify-center">
           <div className="flex flex-col">
             <input
-              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
+              className="mx-auto my-2 w-full md:w-72 h-12 sm:text-sm rounded-full bg-gray-200	py-4 pl-4 focus:outline-none mb-3"
               name='id'
               type='text'
               id='id'
@@ -23,7 +23,7 @@ function LoginForm() {
               value={id}
               onChange={(e) => setId(e.target.value)}/>
             <input
-              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
+              className="mx-auto my-2 w-full md:w-72 h-12 sm:text-sm rounded-full bg-gray-200	py-4 pl-4 focus:outline-none mb-3"
               name='password'
               type='password'
               id='password'
@@ -31,17 +31,19 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}/>
             <button
-              className="mx-auto mt-1 mb-3 w-40 text-center rounded-lg bg-slate-400" >
+              className="mx-auto mt-6 mb-4 w-full md:w-72 h-12 text-center rounded-lg bg-white border border-gray-400 text-gray-800">
               로그인
             </button>
           </div>
-          <div className="flex flex-row justify-center md:mt-3">
-            <div> 아이디 찾기 </div>
-            <div className='mx-2'>  |  </div>
-            <div> 비밀번호 찾기 </div>
-            <div className='mx-2'>  |  </div>
-            <div> 회원가입 </div>
-          </div>
+          {/*<div className="flex flex-row justify-center mt-0 ml-40 mb-3">
+            <div className="text-xs"> 아이디 </div>
+            <div className='mt-0'>  |  </div>
+            <div className="text-xs"> 비밀번호 찾기 </div>
+  </div>*/}
+          <button
+              className="mx-auto mt-2 mb-4 w-full md:w-72 h-12 text-center rounded-lg bg-white border border-gray-400 text-gray-800">
+              회원가입
+            </button>
         </div>
       </div>
     </>
