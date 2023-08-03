@@ -1,6 +1,6 @@
 import React from 'react';
 import MapContainer from '../components/MapContainer';
-import { Landmark } from '../interface/types';
+import { Landmark } from '../types';
 
 interface LandmarkResultProps {
   landmark: Landmark;

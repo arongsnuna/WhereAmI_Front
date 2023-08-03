@@ -9,7 +9,6 @@ declare global {
     export interface MapContainerProps {
         name: string;
         address: string;
-        landmark: any; 
     }
     
     export interface Kakao {
@@ -31,6 +30,7 @@ declare global {
     }
 
     export interface Landmark {
+        id: string;
         name: string;
         imagePath: string;
         address: string;

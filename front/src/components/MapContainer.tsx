@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MapContainerProps, GeocoderResult } from '../types';
+import { MapContainerProps } from '../types';
 
 
 declare global {
@@ -9,8 +9,15 @@ declare global {
     }
 
   declare const kakao: any;
+
+  interface GeocoderResult {
+    address: string;
+    x: number;
+    y: number;
+}
+
   
-const MapContainer: React.FC<MapContainerProps> = ({ name, address, landmark }) => {
+const MapContainer: React.FC<MapContainerProps> = ({ name, address }) => {
 
   
 
@@ -25,7 +32,7 @@ const MapContainer: React.FC<MapContainerProps> = ({ name, address, landmark }) 
     // 주소-좌표 변환 객체를 생성합니다.
     const geocoder = new window.kakao.maps.services.Geocoder();
     // 주소로 좌표를 검색합니다..
-    geocoder.addressSearch(address, function (result: kakao.maps.services.GeocoderResult[], status: kakao.maps.services.Status) {
+    geocoder.addressSearch(address, function (result: GeocoderResult[], status: kakao.maps.services.Status) {
       // 정상적으로 검색이 완료됐으면
       if (status === window.kakao.maps.services.Status.OK) {
         const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);

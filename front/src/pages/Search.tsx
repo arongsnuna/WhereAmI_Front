@@ -3,45 +3,53 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { postData } from '../api/index';
 import wherelogo from '../assets/where.png'
 import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import { useNavigate } from "react-router-dom";
-import MapContainer from '../components/MapContainer';
+import { useQuery } from 'react-query';
+import LandmarkResult from '../components/LandmarkResult';
+
 
 interface Landmark {
-  name: string;
-  imagePath: string;
-  address: string;
+    id: string;
+    name: string;
+    imagePath: string;
+    address: string;
 }
 
-interface APIResponse {
-  landmark: Landmark;
-  nearByLandmarks: Landmark[];
+interface LandmarkResponse {
+    landmark: Landmark;
+    nearByLandmarks: Landmark[];
 }
+
+
 
 const Search = () => {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const config = {
         headers: { 'Content-Type': 'multipart/form-data' },
     };
-    const queryClient = useQueryClient();
-    const [uploadedFile, setUploadedFile] = useState(null);
-    const { data } = useQuery(['landmark', uploadedFile], async()=>{
-        await postData('/image',uploadedFile, config);
-    })
-    const landmark = queryClient.getQueryData(['landmark',uploadedFile]).landmark;
-    const nearByLandmarks =  queryClient.getQueryData(['landmark',uploadedFile]).nearByLandmarks;
+    // const queryClient = useQueryClient();
+    const [uploadedFile] = useState<File | null>(null);
+
+    const response = useQuery<LandmarkResponse, Error>(
+        ['landmark', uploadedFile],
+        async (): Promise<LandmarkResponse> => {
+            const apiResponse = await postData<LandmarkResponse>('/image', uploadedFile, config);
+            return apiResponse; // Return the response directly
+        }
+    );
+    
+    const landmark = response.data?.landmark;
+    const nearByLandmarks = response.data?.nearByLandmarks;
     const handleLogin = () => {
 
     };
 
     const handleImageUpload = async (file: File) => {
         try {
-          const formData = new FormData();
-          formData.append('file', file);
-          console.log(data)
-
+            const formData = new FormData();
+            formData.append('file', file);
+            console.log(response.data) // Fix the log statement to use 'response' instead of 'responseData'
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
     };
     const handleButtonClick = async()=>{
@@ -78,7 +86,7 @@ const Search = () => {
                         </button>
                     </div>
                 </div>
-                {uploadedFile && <LandmarkResult landmark={landmark} nearbyLandmarks={nearByLandmarks}/>}
+                {uploadedFile && landmark && nearByLandmarks && <LandmarkResult landmark={landmark} nearbyLandmarks={nearByLandmarks} />}
             </div>
         </div>
     )

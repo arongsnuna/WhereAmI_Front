@@ -1,10 +1,6 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import "../global.css";
 import wherelogo from '../assets/where.png';
-import { useSnackbar } from 'notistack';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { postData as POST} from '../api/index';
 import { Link } from 'react-router-dom';
 
 
@@ -13,8 +9,10 @@ function RegisterForm() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+
+  };
   
 
     return (

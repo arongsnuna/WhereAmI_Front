@@ -18,14 +18,15 @@ export const getData = async <T>(url: string, config?: AxiosRequestConfig): Prom
 };
 
 //TODO: POST 메서드
-export const postData = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
+export const postData = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
   try {
-    const response = await client.post<APIResponse<T>>(url, data, config);
-    return response.data;
+    const response = await client.post<{ data: T }>(url, data, config);
+    return response.data.data; // Access the nested 'data' property here
   } catch (error: any) {
     throw new Error(error.message);
   }
 };
+
 
 //TODO: PUT 메서드
 export const putData = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
