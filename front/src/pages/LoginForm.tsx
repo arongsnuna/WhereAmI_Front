@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import "../global.css";
-import wherelogo from '../../public/images/where.png'
+import wherelogo from '../assets/where.png'
 
 function LoginForm() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
+  
 
   return (
     <>
