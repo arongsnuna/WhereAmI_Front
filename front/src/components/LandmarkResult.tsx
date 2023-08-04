@@ -3,6 +3,7 @@ import MapContainer from '../components/MapContainer';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import * as api from '../api/index';
 
 
 
@@ -10,6 +11,7 @@ interface Landmark {
   name: string;
   address: string;
   imagePath: string;
+  landmarkId: number;
 }
 interface LandmarkResultProps {
   landmark: Landmark;
@@ -17,6 +19,34 @@ interface LandmarkResultProps {
 }
 
 const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmarks }) => {
+  async function isClicked(){
+    const response = await api.getData('/bookmarks/user/${userId}/landmark/${landmark.landmarkId}');
+    return response;
+  }
+
+  const addBookmark = async(e:any) => {
+    e.preventDefault();
+    try{
+      await api.postData('/bookmarks',{landmarkId:landmark.landmarkId});
+      alert('해당 랜드마크를 북마크에 추가하였습니다.');
+    }
+    catch(err){
+      console.log(err);
+      alert(err);
+    }
+  }
+  const removeBookmark = async(e:any) => {
+    e.preventDefault();
+    try{
+      await api.deleteData('/bookmarks/${landmarkId}');
+      alert('해당 랜드마크를 북마크에서 제거하였습니다.');
+    }
+    catch(err){
+      console.log(err);
+      alert(err);
+    }
+  }
+
   const settings = {
     dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
     infinite: false, // 무한 반복 (true: 무한 반복, false: 끝에 도달하면 정지)
@@ -46,7 +76,11 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
               <p className="ml-4 text-left sm:text-xl">{landmark.name}</p>
               <p className="ml-4 text-left mb-2 text-xs sm:text-l">{landmark.address}</p>
             </div>
-            <button className="mr-4"></button>
+            {isClicked?(
+              <button className="mr-4" onClick={addBookmark}>♥</button>
+            ):(
+              <button className="mr-4" onClick={removeBookmark}>♡</button>
+            )}
           </div>
         </div>
         <div className="w-full border border-gray-200 rounded flex m-2 items-center justify-center ">

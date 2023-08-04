@@ -2,9 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
 import wherelogo from '../assets/where.png'
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import LandmarkResult from '../components/LandmarkResult';
 import "../global.css";
+import { UserContext } from '../context/Context';
+import { useNavigate } from 'react-router-dom';
+
 
 const Search = () => {
     const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -13,9 +16,6 @@ const Search = () => {
     };
     const [landmark, setLandmark] = useState(null);
     const [nearByLandmarks, setNearByLandmarks] = useState(null);
-    const handleLogin = () => {
-
-    };
 
     const handleImageUpload = async (file: File) => {
         try {
@@ -35,6 +35,20 @@ const Search = () => {
             await handleImageUpload(file);
         }
     }
+    const navigate = useNavigate();
+    const { user, dispatch } = useContext(UserContext);
+    console.log('User state:', user);
+    const handleLogin = () => {
+
+        if (user) {
+            dispatch({ type: 'LOGOUT' });
+        } else {
+            navigate('/loginform');
+        }
+    };
+    const buttonText = user ? '로그아웃' : '로그인';
+
+
 
     return (
         <div>
@@ -44,7 +58,7 @@ const Search = () => {
                 <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
-                            로그인
+                            {buttonText}
                         </button>
                 </div>
             </div>

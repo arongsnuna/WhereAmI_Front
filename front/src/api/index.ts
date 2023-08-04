@@ -20,8 +20,11 @@ export const getData = async <T>(url: string, config?: AxiosRequestConfig): Prom
 //TODO: POST 메서드
 export const postData = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
   try {
+    console.log(data, "data");
     const response = await client.post<APIResponse<T>>(url, data, config);
+    console.log(response);
     return response.data;
+
   } catch (error: any) {
     throw new Error(error.message);
   }
