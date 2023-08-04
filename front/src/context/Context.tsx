@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect, ReactNode } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { loginReducer } from '../reducer/LoginReducer';
 import * as Api from '../api/index';
@@ -16,6 +16,11 @@ interface UserState {
     user: null,
     isLoggedIn: false,
     };
+
+    interface ContextProviderProps {
+        children: ReactNode;
+    }
+
 
     export const UserContext = createContext<{
     userState: UserState;
@@ -37,7 +42,7 @@ interface UserState {
         onSuccess: (data) => {
             dispatch({
             type: 'LOGIN_SUCCESS',
-            payload: data.user,
+            payload: data.data.user,
             });
         },
         onError: () => {
@@ -54,7 +59,7 @@ interface UserState {
     };
 
     return (
-        <UserContext.Provider value={{ userState, dispatch, login }}>{props.children}</UserContext.Provider>
+        <UserContext.Provider value={{ userState, dispatch, login }}>{children}</UserContext.Provider>
     );
 };
 

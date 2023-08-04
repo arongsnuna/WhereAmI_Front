@@ -4,16 +4,17 @@ import wherelogo from '../assets/where.png';
 import { useSnackbar } from 'notistack';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { postData as POST} from '../api/index';
+import { postData as POST } from '../api/index';
 
 const registerUser = async (userData) => {
+  try {
     const response = await POST('/users/new', userData);
-    if (response.status === 200 || response.status === 201) {
-      const data = await response.json();
-      return data;
-    }
+    return response; // response.data should already have the correct structure
+  } catch (err) {
+    console.log(err, "error");
     throw new Error('회원가입 실패');
-  };
+  }
+};
 
 function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -23,49 +24,22 @@ function RegisterForm() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  //이메일 형식 확인하기 example @ example.com
-  const validateEmail = (emailAddress) =>
-      emailAddress
-        .toLowerCase()
-        .match(
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        );
-    
-  
-
-    const mutation = useMutation(registerUser, {
-      onSuccess: async (data) => {
-        const { token, message } = data;
-        if (token) {
-          sessionStorage.setItem('userToken', token);
-          enqueueSnackbar('회원가입 성공', { variant: 'success' });
-          navigate('/LoginForm');
-        } else if (message) {
-          enqueueSnackbar(message, { variant: 'success' });
-          navigate('/LoginForm');
-        }
-      },
-      onError: (err) => {
-        enqueueSnackbar(`${err.message}`, { variant: 'error' });
-      },
+  const mutation = useMutation(registerUser, {
+    onSuccess: (data) => { // 
+      console.log(data);
+      const { message } = data; //
+      if (message) {
+        enqueueSnackbar(message, { variant: 'success' });
+        navigate('/LoginForm');
+      }
+    },
+    onError: (err) => {
+      enqueueSnackbar(`${err.message}`, { variant: 'error' });
+    },
   });
       
   const handleSubmit = (e) => {
       e.preventDefault();
-  
-      const isEmailValid = validateEmail(email);
-      const isPasswordValid = password.length >= 8;
-  
-      if (password !== confirmPassword) {
-        enqueueSnackbar('Passwords do not match', { variant: 'error' });
-        return;
-      }
-  
-      if (!isEmailValid || !isPasswordValid) {
-        enqueueSnackbar('Invalid inputs', { variant: 'error' });
-        return;
-      }
-  
       mutation.mutate({ email, password, userName });
     };
   
@@ -116,9 +90,11 @@ function RegisterForm() {
                 회원가입
               </button>
             </div>
-            <div className="flex flex-row justify-center md:mt-3">
-              <p>이미 회원이신가요? 로그인 </p>
-            </div>
+            <p>이미 회원이신가요?</p>
+            <button className="mx-auto mt-1 mb-3 w-40 text-center rounded-lg bg-slate-400" 
+              onClick = {() => navigate('/loginform')}>
+              로그인하기
+            </button>
           </div>
         </div>
       </>
