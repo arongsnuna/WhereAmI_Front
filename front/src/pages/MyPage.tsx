@@ -10,21 +10,29 @@ import {User} from '../interface/user';
 
 
 const MyPage=()=> {
-    const {setAuthState} = useAuth();
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const id = "625534fb-09d0-4f1a-9bb6-149c122bb7a4";
-    const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InRlc3R0ZXN0IiwiaWF0IjoxNjkxMTM4NDE4LCJleHAiOjE2OTExNzQ0MTh9.GVAQR65fRztvC2IaoaqosZlYsOYkCihr5VwNwltlXS8";
-    setAuthState({id, accessToken});
     const {authState} =useAuth();
-    useEffect(()=>{
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
         const fetchCurrentUser = async () => {
-            const user= await api.getData(`/user/625534fb-09d0-4f1a-9bb6-149c122bb7a4`)
-            //const user= await api.getData(`/user/${authState.id}`)
-            setCurrentUser(user);
-            console.log(user);
+            setLoading(true);
+            try {
+                if (authState.id) {
+                    console.log("Attempting to fetch user with id:", authState.id);
+                    const user = await api.getData(`/user/${authState.id}`);
+                    console.log("Fetched user:", user);
+                    setCurrentUser(user);
+                } else {
+                    console.log("authState.id is undefined or not valid");
+                }
+            } catch (err) {
+                console.error("Error fetching user:", err);
+            }
+            setLoading(false);
         };
         fetchCurrentUser();
-    },[]);
+    }, [authState]);
 
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
@@ -33,14 +41,25 @@ const MyPage=()=> {
 
     const [whereTraveled, setWhereTraveled] = useState(null);
     const [travelSchedule, setTraveSchedule] = useState(null);
-    const updateUserInfo = (e:any) => {
+    
+    const updateUserInfo = async (e: any) => {
         e.preventDefault();
         try{
             //업데이트해줘야함!!!
+            const payload = {
+                name: userName,
+                email: userEmail,
+                password: userPassword,
+                // Include any other fields that need to be updated.
+            };
+            const response = await api.putData(`/user/${authState.id}`, payload);
+            if (response.success) {
+                setCurrentUser(response.user);
+                alert("유저 정보가 성공적으로 수정되었습니다.");
+            }
         }
         catch(err){
             console.log(err);
-            alert(err);
         }
     };
     const deleteUserInfo = async(e:any) => {
@@ -121,17 +140,31 @@ const MyPage=()=> {
             </div>
         </div>
         <div className="flex justify-center mt-4">
+            <form onSubmit={updateUserInfo}>
+                <label>
+                    Name:
+                    <input type="text" value={userName} onChange={e => setUserName(e.target.value)} />
+                </label>
+                <label>
+                    Email:
+                    <input type="email" value={userEmail} onChange={e => setUserEmail(e.target.value)} />
+                </label>
+                <label>
+                    Password:
+                    <input type="password" value={userPassword} onChange={e => setUserPassword(e.target.value)} />
+                </label>
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
+                    type="submit"
+                >
+                    Update User Info
+                </button>
+            </form>
             <button
-            className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
-            onClick={updateUserInfo}
+                className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
+                onClick={deleteUserInfo}
             >
-            Update User Info
-            </button>
-            <button
-            className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
-            onClick={deleteUserInfo}
-            >
-            Delete User Info
+                Delete User Info
             </button>
         </div>
         </>

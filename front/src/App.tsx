@@ -15,6 +15,16 @@ const initialState: UserState = {
   isLoggedIn: false,
 };
 
+const header = (
+  <header className="fixed bottom-0 w-full flex justify-between">
+    <nav>
+      <a href="/Bookmarks">북마크</a>
+      <a href="/">여긴어디</a>
+      <a href="/Mypage">마이</a>
+    </nav>
+  </header>
+);
+
 
 function App() {
   const [state, dispatch] = useReducer(loginReducer, initialState);
@@ -29,6 +39,7 @@ function App() {
             <Route path="/Bookmarks" element={<Bookmarks />} />
           </Routes>
       </Router>
+      {header}
     </ContextProvider>
   )
 }

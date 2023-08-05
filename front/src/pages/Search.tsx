@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
 import wherelogo from '../assets/where.png'
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import LandmarkResult from '../components/LandmarkResult';
 import "../global.css";
 import { UserContext } from '../context/Context';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Search = () => {
+
     const fileInputRef = React.useRef<HTMLInputElement>(null);
     const config = {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -19,14 +20,14 @@ const Search = () => {
 
     const handleImageUpload = async (file: File) => {
         try {
-          const formData = new FormData();
-          formData.append('file', file);
-          const response = await postData('/image', formData, config);
-          await setLandmark(response.landmark);
-          await setNearByLandmarks(response.nearByLandmarks);
+            const formData = new FormData();
+            formData.append('file', file);
+            const response = await postData('/image', formData, config);
+            await setLandmark(response.landmark);
+            await setNearByLandmarks(response.nearByLandmarks);
         } catch (err) {
-          console.log(err);
-          alert(err);
+            console.log(err);
+            alert(err);
         }
     };
     const handleButtonClick = async()=>{
@@ -36,20 +37,24 @@ const Search = () => {
         }
     }
     const navigate = useNavigate();
-    const { user, dispatch } = useContext(UserContext);
-    console.log('User state:', user);
-    const handleLogin = () => {
+    const { userState, dispatch, login } = useContext(UserContext);
+    useEffect(() => {
+        console.log("User state updated:", userState);
+    }, [userState]);
 
-        if (user) {
+    const handleLogin = () => {
+        console.log(userState);
+        if (userState.user) {
             dispatch({ type: 'LOGOUT' });
         } else {
             navigate('/loginform');
         }
     };
-    const buttonText = user ? '로그아웃' : '로그인';
+    console.log(userState.user);
+    const buttonText = userState.user ? '로그아웃' : '로그인';
 
-
-
+    
+    console.log(userState.user);
     return (
         <div>
         {landmark &&
@@ -67,7 +72,7 @@ const Search = () => {
             <div>
                 <div className='w-full flex justify-end pt-5 pr-5'>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
-                            로그인
+                            {buttonText}
                         </button>
                 </div>
                 <a className='h-full w-full mb-4 flex items-center justify-center'><img src={wherelogo} className='h-full ' alt="Vite logo" /></a>

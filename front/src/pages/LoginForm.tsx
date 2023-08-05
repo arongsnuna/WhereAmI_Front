@@ -13,13 +13,12 @@ function LoginForm() {
   const navigate = useNavigate();
 
   const loginMutation = useMutation(async () => {
-    const data = await postData('/users/login', { userName, password });
-    if (data.statusCode === 401) {
-      throw new Error(data.message);
-    }
-    dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
+    const response = await postData('/users/login', { userName, password });
+    const { accessToken } = response; 
+  
+    dispatch({ type: 'LOGIN_SUCCESS', payload: accessToken }); 
     navigate('/');
-    return data;
+    return { accessToken };
   });
 
   const handleSubmit = async (e) => {

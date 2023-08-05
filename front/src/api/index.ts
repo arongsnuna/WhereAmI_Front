@@ -10,7 +10,15 @@ const client = axios.create({
 //TODO: GET 메서드
 export const getData = async <T>(url: string, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
   try {
-    const response = await client.get<APIResponse<T>>(url, config);
+    const token = localStorage.getItem('user'); // 저장된 토큰을 가져온다
+    const configWithToken = {
+      ...config,
+      headers: {
+        ...config?.headers, // 기존의 헤더 보존
+        Authorization: `Bearer ${token}`, //Auth 헤더 추가
+      },
+    };
+    const response = await client.get<APIResponse<T>>(url, configWithToken); // 최신 config 사용
     return response.data;
   } catch (error: any) {
     throw new Error(error.message);
