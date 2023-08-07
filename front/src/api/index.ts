@@ -10,7 +10,7 @@ const client = axios.create({
 //TODO: GET 메서드
 export const getData = async <T>(url: string, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
   try {
-    const token = localStorage.getItem('user'); // 저장된 토큰을 가져온다
+    const token = localStorage.getItem('accessToken'); // 저장된 토큰을 가져온다
     const configWithToken = {
       ...config,
       headers: {
@@ -30,7 +30,25 @@ export const postData = async <T>(url: string, data?: any, config?: AxiosRequest
   try {
     console.log(data, "data");
     const response = await client.post<APIResponse<T>>(url, data, config);
-    console.log(response);
+    return response.data;
+
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+//TODO: POST 메서드
+export const postWithAuth = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
+  try {
+    const token = localStorage.getItem('accessToken'); // 저장된 토큰을 가져온다
+    const configWithToken = {
+      ...config,
+      headers: {
+        ...config?.headers, // 기존의 헤더 보존
+        Authorization: `Bearer ${token}`, //Auth 헤더 추가
+      },
+    };
+    const response = await client.post<APIResponse<T>>(url, data, configWithToken);
     return response.data;
 
   } catch (error: any) {
@@ -51,7 +69,15 @@ export const putData = async <T>(url: string, data?: any, config?: AxiosRequestC
 //TODO: Delete 메서드
 export const deleteData = async <T>(url: string, config?: AxiosRequestConfig): Promise<APIResponse<T>> => {
   try {
-    const response = await client.delete<APIResponse<T>>(url, config);
+    const token = localStorage.getItem('accessToken'); // 저장된 토큰을 가져온다
+    const configWithToken = {
+      ...config,
+      headers: {
+        ...config?.headers, // 기존의 헤더 보존
+        Authorization: `Bearer ${token}`, //Auth 헤더 추가
+      },
+    };
+    const response = await client.delete<APIResponse<T>>(url, configWithToken);
     return response.data;
   } catch (error: any) {
     throw new Error(error.message);

@@ -1,17 +1,17 @@
-import React from 'react';
 import MapContainer from '../components/MapContainer';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import * as api from '../api/index';
-
+import React, { useState, useContext, useEffect } from 'react';
+import { UserContext } from '../context/Context';
 
 
 interface Landmark {
   name: string;
   address: string;
   imagePath: string;
-  landmarkId: number;
+  id: number;
 }
 interface LandmarkResultProps {
   landmark: Landmark;
@@ -19,32 +19,25 @@ interface LandmarkResultProps {
 }
 
 const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmarks }) => {
-  async function isClicked(){
-    const response = await api.getData('/bookmarks/user/${userId}/landmark/${landmark.landmarkId}');
-    return response;
+  const { userState, dispatch, login } = useContext(UserContext);
+  const [isBookmarkClicked, setIsBookmarkClicked] = useState(false);
+
+  async function checkIsClicked(landmarkId: number) {
+    try {
+      await api.getData(`/bookmarks/${landmarkId}`);
+      await setIsBookmarkClicked(true);
+    } catch (error) {
+      setIsBookmarkClicked(false);
+    }
   }
 
-  const addBookmark = async(e:any) => {
-    e.preventDefault();
-    try{
-      await api.postData('/bookmarks',{landmarkId:landmark.landmarkId});
-      alert('해당 랜드마크를 북마크에 추가하였습니다.');
-    }
-    catch(err){
-      console.log(err);
-      alert(err);
-    }
+  async function handleBookmark(landmarkId: number){
+    await console.log('1111',landmarkId);
+    await api.postWithAuth('/bookmarks/toggle',{landmarkId});
+    await checkIsClicked(landmarkId);
   }
-  const removeBookmark = async(e:any) => {
-    e.preventDefault();
-    try{
-      await api.deleteData('/bookmarks/${landmarkId}');
-      alert('해당 랜드마크를 북마크에서 제거하였습니다.');
-    }
-    catch(err){
-      console.log(err);
-      alert(err);
-    }
+  const afterLogin=async () => {
+    alert('로그인 후 이용해주세요.');
   }
 
   const settings = {
@@ -64,6 +57,7 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
       }
     ]
   };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row" style={{fontFamily:'GmarketSansMedium'}}>
@@ -76,10 +70,16 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
               <p className="ml-4 text-left sm:text-xl">{landmark.name}</p>
               <p className="ml-4 text-left mb-2 text-xs sm:text-l">{landmark.address}</p>
             </div>
-            {isClicked?(
-              <button className="mr-4" onClick={addBookmark}>♥</button>
+            {!userState.accessToken?(
+              <button className="mr-4" onClick={()=>afterLogin()}>♡</button>
             ):(
-              <button className="mr-4" onClick={removeBookmark}>♡</button>
+              <>
+                {isBookmarkClicked?(
+                  <button className="mr-4" onClick={() => handleBookmark(landmark.id)}>♥</button>
+                ):(
+                  <button className="mr-4" onClick={() => handleBookmark(landmark.id)}>♡</button>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -95,8 +95,23 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
               <div className='m-4'>
                 <img  src={land.imagePath} alt={land.name} />
               </div>
-              <p style={{fontFamily:'GmarketSansMedium'}} className="ml-4 text-left text-l sm:text-xl">{land.name}</p>
-              <p style={{fontFamily:'GmarketSansMedium'}} className="ml-4 text-left text-xs sm:text-l mb-2">{land.address}</p>
+              <div className="flex justify-between items-center">
+                <div>
+                  <p style={{fontFamily:'GmarketSansMedium'}} className="ml-4 text-left text-l sm:text-xl">{land.name}</p>
+                  <p style={{fontFamily:'GmarketSansMedium'}} className="ml-4 text-left text-xs sm:text-l mb-2">{land.address}</p>
+                </div>
+                {!userState.accessToken?(
+                  <button className="mr-4" onClick={()=>afterLogin()}>♡</button>
+                ):(
+                  <>
+                    {isBookmarkClicked ? (
+                     <button className="mr-4" onClick={() => handleBookmark(land.id)}>♥</button>
+                    ):(
+                      <button className="mr-4" onClick={() => handleBookmark(land.id)}>♡</button>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
         ))}

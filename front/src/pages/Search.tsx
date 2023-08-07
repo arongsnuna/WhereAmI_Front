@@ -44,17 +44,15 @@ const Search = () => {
 
     const handleLogin = () => {
         console.log(userState);
-        if (userState.user) {
+        if (userState.accessToken) {
             dispatch({ type: 'LOGOUT' });
         } else {
             navigate('/loginform');
         }
     };
-    console.log(userState.user);
-    const buttonText = userState.user ? '로그아웃' : '로그인';
+    console.log(userState.accessToken);
+    const buttonText = userState.accessToken ? '로그아웃' : '로그인';
 
-    
-    console.log(userState.user);
     return (
         <div>
         {landmark &&

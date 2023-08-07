@@ -14,9 +14,9 @@ function LoginForm() {
 
   const loginMutation = useMutation(async () => {
     const response = await postData('/users/login', { userName, password });
-    const { accessToken } = response; 
-  
-    dispatch({ type: 'LOGIN_SUCCESS', payload: accessToken }); 
+    const { id, accessToken } = response;
+
+    dispatch({ type: 'LOGIN_SUCCESS', payload: {id, accessToken} });
     navigate('/');
     return { accessToken };
   });
