@@ -1,16 +1,42 @@
 import "./global.css";
-import wherelogo from './assets/where.png'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Search from './pages/Search';
+import LoginForm from './pages/LoginForm';
+import RegisterForm from './pages/RegisterForm';
+
+
+// import { loginReducer, UserState } from "./reducer/LoginReducer";
+import ContextProvider from './context/Context';
+//import { useReducer } from "react";
+
+// const initialState: UserState = {
+//   user: null,
+//   isLoggedIn: false,
+// };
+
+const header = (
+  <header className="fixed bottom-0 w-full flex justify-between">
+    <nav>
+      <a href="/">여긴어디</a>
+    </nav>
+  </header>
+);
+
 
 function App() {
-
+  //const [state, dispatch] = useReducer(loginReducer, initialState);
   return (
-    <>
-        <a href="./" className="items-center">
-          <img src={wherelogo} className="logo sm:mx-auto" alt="Vite logo" />
-        </a>
-    </>
-
-);
+    <ContextProvider>
+      <Router>
+          <Routes>
+            <Route path="/" element={<Search />} />
+            <Route path="/loginform" element={<LoginForm />} />
+            <Route path="/RegisterForm" element={<RegisterForm />} />
+          </Routes>
+      </Router>
+      {header}
+    </ContextProvider>
+  )
 }
 
 export default App
