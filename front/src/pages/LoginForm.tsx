@@ -5,12 +5,11 @@ import "../global.css";
 import wherelogo from '../assets/where.png';
 import {UserContext} from '../context/Context';
 import {useNavigate } from 'react-router-dom';
-import { APIResponse }   from '../interface/response';
-
 
 interface LoginResponse {
   accessToken: string;
 }
+
 
 function LoginForm() {
   const [userName, setUserName] = useState("");
@@ -19,20 +18,24 @@ function LoginForm() {
   const navigate = useNavigate();
 
   const loginMutation = useMutation(async () => {
-    const response = await postData<APIResponse<LoginResponse>>('/users/login', { userName, password });
+    const response = await postData<LoginResponse>('/users/login', { 
+      userName, 
+      password 
+    });
     console.log("Response:", response);
 
-    if (!response.data || !response.data.result || !response.data.result.accessToken) {
-      throw new Error("Unexpected API response format");
-    }
-  
-    const { accessToken } = response.data.result;
+    if (!response || !response.accessToken) {
+    throw new Error("Unexpected API response format");
+}
+
+const { accessToken } = response;
 
     dispatch({ type: 'LOGIN_SUCCESS', payload: accessToken }); 
     navigate('/');
 
-    return { accessToken };
+    return { response };
 });
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
