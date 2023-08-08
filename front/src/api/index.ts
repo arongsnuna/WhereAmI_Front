@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 // axios 인스턴스 생성
 const client = axios.create({
-  baseURL: 'http://kdt-ai7-team07.elicecoding.com/',
+  baseURL: 'http://kdt-ai7-team07.elicecoding.com:3000/',
   withCredentials: true,
 })
 
