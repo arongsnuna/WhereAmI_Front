@@ -8,17 +8,6 @@ interface LoginResult {
     accessToken: string;
 }
 
-interface APIResponse<T> {
-    result: T;
-}
-
-
-interface ResponseType {
-    result: {
-        accessToken: string;
-    };
-}
-
 interface UserState {
     user: string | null;
     isLoggedIn: boolean;
@@ -65,12 +54,11 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }): React.Re
     const [userState, dispatch] = useReducer(loginReducer, initialState);
     const queryClient = useQueryClient();
 
-    const loginUser = useMutation<APIResponse<LoginResult>, unknown, { username: string; password: string }>(
-        (data: { username: string; password: string }) => Api.postData<LoginResult>('/users/login', data),
-        {
-            onSuccess: (response: ResponseType) => {
-                console.log(response.result);
-                const { accessToken } = response.result;
+    const loginUser = useMutation<LoginResult, unknown, { username: string; password: string }>(
+        (data: { username: string; password: string }) => 
+            Api.postData<LoginResult>('/users/login', data),{
+            onSuccess: (response: LoginResult) => {
+                const { accessToken } = response;
                 const decodedToken = jwtDecode(accessToken) as string;  // Asserting the type here
                 console.log('Decoded token:', decodedToken);
                 localStorage.setItem('user', accessToken);

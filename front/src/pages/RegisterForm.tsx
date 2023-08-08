@@ -4,7 +4,7 @@ import wherelogo from '../assets/where.png';
 import { useSnackbar } from 'notistack';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { postData as POST } from '../api/index';
+import { postData } from '../api/index';
 
 interface UserData {
   email: string;
@@ -12,9 +12,13 @@ interface UserData {
   userName: string;
 }
 
-const registerUser = async (userData: UserData) => {
+interface RegisterResponse {
+  message: string;
+}
+
+const registerUser = async (userData: UserData): Promise<RegisterResponse> => {
   try {
-    const response = await POST('/users/new', userData);
+    const response = await postData<RegisterResponse>('/users/new', userData);
     return response;
   } catch (err) {
     console.log(err, "error");
@@ -30,7 +34,7 @@ function RegisterForm() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const mutation = useMutation(registerUser, {
+  const mutation = useMutation<RegisterResponse, Error, UserData>(registerUser, {
     onSuccess: (data) => { 
       console.log(data);
       const { message } = data; 

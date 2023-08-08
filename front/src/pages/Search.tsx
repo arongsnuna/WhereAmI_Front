@@ -40,7 +40,7 @@ const Search = () => {
             setLandmark(response.landmark);
             setNearByLandmarks(response.nearByLandmarks);
         } catch (err) {
-            console.log(err);
+            console.log("Error uploading the image:", err);
             alert(err);
         }
     };
