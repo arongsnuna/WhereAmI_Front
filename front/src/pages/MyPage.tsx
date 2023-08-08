@@ -38,6 +38,12 @@ const MyPage=()=> {
           navigate('/loginform');
       }
     };
+    const navigateBookmarks = ()=>{
+        navigate('/bookmarks');
+    }
+    const navigateHome= ()=>{
+        navigate('/');
+    }
 
     const updateUserInfo = async (e: any) => {
         e.preventDefault();
@@ -86,7 +92,7 @@ const MyPage=()=> {
         <>
           <div className='flex'>
                 <div className='w-1/5'></div>
-                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>여긴 어디?</div>
+                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
                     <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                         {buttonText}
@@ -98,8 +104,9 @@ const MyPage=()=> {
           ) :
           (<>
           <div className="flex">
-              <div className="w-1/3 p-5">
-                  <div className="bg-gray-300 border p-4 rounded-lg">
+              <div className="w-1/3 px-5">
+              <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>마이페이지</h2>
+                  <div className="border border-gray-200 p-4 rounded-lg">
                       <div className='flex items-center justify-center'>
                         {profilePath?(
                           <img src={profilePath} className='w-1/4 m-4' />
@@ -108,23 +115,23 @@ const MyPage=()=> {
                         )}
                       </div>
                       <p className="mb-2">
-                      <span className="font-bold">이름: {userName}</span>
+                      <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>이름: {userName}</span>
                       </p>
                       <p className="mb-2">
-                      <span className="font-bold">자기소개: {description}</span>
+                      <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>자기소개: {description}</span>
                       </p>
                   </div>
               </div>
-              <div className="w-2/3 flex flex-col">
+              <div className="w-2/3 flex flex-col pr-5">
                   <div className="flex-1">
-                      <h2>북마크</h2>
-                      <div className="bg-gray-300 border rounded-lg items-center mb-8 pt-3">
+                      <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>북마크</h2>
+                      <div className="border-gray-200 border rounded-lg items-center mb-8 pt-3" >
                         {bookmarkCounts && Object.keys(bookmarkCounts).length > 0 &&(
                           <Slider {...settings}>
                               {Object.entries(bookmarkCounts).map(([location,info])=>(
-                                <div key={location} className="flex justify-center p-2">
+                                <div key={location} className="flex justify-center p-2" onClick={navigateBookmarks}>
                                   <figure>
-                                  <img src={info.imagePath}/><figcaption className='text-center'>{location}({info.count})</figcaption>
+                                  <img src={info.imagePath}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{location}({info.count})</figcaption>
                                   </figure>
                                 </div>
                                 ))
@@ -135,8 +142,8 @@ const MyPage=()=> {
                       </div>
                   </div>
                   <div className="flex-1 ">
-                      <h2>일정</h2>
-                      <div className="bg-gray-300 border p-4 rounded-lg"></div>
+                      <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>일정</h2>
+                      <div className="border-gray-200 border p-4 rounded-lg"></div>
                   </div>
               </div>
           </div>

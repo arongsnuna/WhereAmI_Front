@@ -3,15 +3,17 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import * as api from '../api/index';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, SetStateAction  } from 'react';
 import { UserContext } from '../context/Context';
+import { useQuery} from 'react-query';
 
 
 interface Landmark {
   name: string;
   address: string;
   imagePath: string;
-  id: number;
+  id?: number;
+  landmarkId?: number;
 }
 interface LandmarkResultProps {
   landmark: Landmark;
@@ -19,23 +21,45 @@ interface LandmarkResultProps {
 }
 
 const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmarks }) => {
+  // 로그인된 user 확인
   const { userState, dispatch, login } = useContext(UserContext);
-  const [isBookmarkClicked, setIsBookmarkClicked] = useState(false);
+  const [landmarkConfirm, setLandmarkConfirm]= useState(false);
+  const [nearByLandmarksConfirm, setNearByLandmarksConfirm]= useState([false]);
 
-  async function checkIsClicked(landmarkId: number) {
-    try {
-      await api.getData(`/bookmarks/${landmarkId}`);
-      await setIsBookmarkClicked(true);
-    } catch (error) {
-      setIsBookmarkClicked(false);
+  // user의 전체 북마크 모음
+  const [bookmarkZip, setBookmarkZip] =  useState([]);
+  const { data, isLoading } = useQuery(['bookmarkZip', userState.id], () =>
+    api.getData(`/bookmarks/bookmarks`)
+  );
+  useEffect(() => {
+    async function fetchData() {
+      if (!isLoading && data) {
+        setBookmarkZip(data);
+      }
+    }
+    fetchData();
+  }, [isLoading, data, landmark]);
+
+  // 주어진 landmarkId가 bookmarkZip에 있는지 확인
+  const isInBookmarkZip = async(landmarkId: number): Promise<boolean>=>{
+    try{
+      if(bookmarkZip != null && bookmarkZip.length >0){
+        const hasId: boolean = !!bookmarkZip.find((item: Landmark)=>item.landmarkId=== landmarkId);
+        return hasId;
+      }
+      return false;
+    }
+    catch(err){
+      console.log(err);
+      alert(err);
+      return false;
     }
   }
 
   async function handleBookmark(landmarkId: number){
-    await console.log('1111',landmarkId);
     await api.postWithAuth('/bookmarks/toggle',{landmarkId});
-    await checkIsClicked(landmarkId);
   }
+
   const afterLogin=async () => {
     alert('로그인 후 이용해주세요.');
   }
@@ -74,11 +98,14 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
               <button className="mr-4" onClick={()=>afterLogin()}>♡</button>
             ):(
               <>
-                {isBookmarkClicked?(
-                  <button className="mr-4" onClick={() => handleBookmark(landmark.id)}>♥</button>
-                ):(
-                  <button className="mr-4" onClick={() => handleBookmark(landmark.id)}>♡</button>
-                )}
+                {async () => {
+                  const hasBookmark = await isInBookmarkZip(landmark.id);
+                  return (
+                    <button className="mr-4" onClick={() => handleBookmark(landmark.id)}>
+                      {hasBookmark ? '♥' : '♡'}
+                    </button>
+                  );
+                }}
               </>
             )}
           </div>
@@ -87,7 +114,7 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
           <MapContainer name={landmark.name} address={landmark.address} />
         </div>
       </div>
-      <p className='text-3xl ml-3 mt-3' style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>주변에는?</p>
+      <p className='text-3xl ml-5 mt-3' style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>주변에는?</p>
       <Slider {...settings}>
         {nearByLandmarks.map((land) => (
           <div>
@@ -104,11 +131,14 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
                   <button className="mr-4" onClick={()=>afterLogin()}>♡</button>
                 ):(
                   <>
-                    {isBookmarkClicked ? (
-                     <button className="mr-4" onClick={() => handleBookmark(land.id)}>♥</button>
-                    ):(
-                      <button className="mr-4" onClick={() => handleBookmark(land.id)}>♡</button>
-                    )}
+                    {async () => {
+                      const hasBookmark = await isInBookmarkZip(land.id);
+                      return (
+                        <button className="mr-4" onClick={() => handleBookmark(land.id)}>
+                          {hasBookmark ? '♥' : '♡'}
+                        </button>
+                      );
+                    }}
                   </>
                 )}
               </div>

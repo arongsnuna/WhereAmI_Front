@@ -13,9 +13,8 @@ const Bookmarks=()=>{
     const { userState, dispatch, login } = useContext(UserContext);
     const [bookmarkZip, setBookmarkZip] = useState(null);
     const { data, isLoading } = useQuery(['bookmarks', userState.id], () =>
-        api.getData(`/bookmarks/user/${userState.id}`)
+        api.getData(`/bookmarks/user`)
     );
-    console.log(data);
     useEffect(() => {
       if(!isLoading&&data) {
         setBookmarkZip(data);
@@ -32,6 +31,9 @@ const Bookmarks=()=>{
             navigate('/loginform');
         }
     };
+    const navigateHome= ()=>{
+        navigate('/');
+    }
     const settings = {
         dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
         infinite: false, // 무한 반복 (true: 무한 반복, false: 끝에 도달하면 정지)
@@ -54,7 +56,7 @@ const Bookmarks=()=>{
         <div>
             <div className='flex'>
                 <div className='w-1/5'></div>
-                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>여긴 어디?</div>
+                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
                     <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                         {buttonText}
@@ -63,13 +65,13 @@ const Bookmarks=()=>{
             </div>
             {bookmarkZip && bookmarkZip.length>0 ?(
                 bookmarkZip.map((item,index)=>(
-                    <div className="bg-gray-300 border rounded-lg items-center mb-8 pt-3 text-bold">
-                        <h2>{item.siDo}</h2>
+                    <div className="w-9/10 border border-gray-200 rounded m-2 justify-centertext-bold">
+                        <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='m-3'>{item.siDo}</h2>
                             <div>
                             <Slider {...settings}>
                                 {item.bookmarks.map((bookmark,idx)=>(
                                     <figure>
-                                    <img src={bookmark.imagePath}/><figcaption className='text-center'>{bookmark.name}</figcaption>
+                                    <img src={bookmark.imagePath}/><figcaption style={{fontFamily:'GmarketSansMedium'}} className='text-center m-1'>{bookmark.name}</figcaption>
                                     </figure>
 
                                 ))}
