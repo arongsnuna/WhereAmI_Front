@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import * as api from '../api/index';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -63,7 +63,7 @@ const Bookmarks=()=>{
                     </button>
                 </div>
             </div>
-            {bookmarkZip && bookmarkZip.length>0 ?(
+            {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                 bookmarkZip.map((item,index)=>(
                     <div className="w-9/10 border border-gray-200 rounded m-2 justify-centertext-bold">
                         <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='m-3'>{item.siDo}</h2>

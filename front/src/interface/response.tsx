@@ -1,7 +1,7 @@
 
 // types/commonResponse.ts
 
-import axios, {AxiosResponse,} from 'axios'
+//import axios, {AxiosResponse,} from 'axios'
 /** Axios Response 데이터 형식
  *  config : 요청에 대한 axios 구성 설정
  *  data 서버가 제공한 응답 데이터

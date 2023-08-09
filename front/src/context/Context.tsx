@@ -20,9 +20,9 @@ const initialState: UserState = {
     isLoggedIn: false,
     };
 
-interface ContextProviderProps {
-        children: ReactNode;
-    }
+// interface ContextProviderProps {
+//         children: ReactNode;
+//     }
 
 
 export const UserContext = createContext<{

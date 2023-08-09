@@ -1,15 +1,25 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import "../global.css";
 import wherelogo from '../assets/where.png';
 import { useSnackbar } from 'notistack';
 import { useMutation } from 'react-query';
-import { Link, useNavigate } from 'react-router-dom';
-import { postData as POST } from '../api/index';
+import { useNavigate } from 'react-router-dom';
+import { postData } from '../api/index';
 
-const registerUser = async (userData) => {
+interface UserData {
+  email: string;
+  password: string;
+  userName: string;
+}
+
+interface RegisterResponse {
+  message: string;
+}
+
+const registerUser = async (userData: UserData): Promise<RegisterResponse> => {
   try {
-    const response = await POST('/users/new', userData);
-    return response; // response.data should already have the correct structure
+    const response = await postData<RegisterResponse>('/users/new', userData);
+    return response;
   } catch (err) {
     console.log(err, "error");
     throw new Error('회원가입 실패');
@@ -24,21 +34,21 @@ function RegisterForm() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const mutation = useMutation(registerUser, {
-    onSuccess: (data) => { // 
+  const mutation = useMutation<RegisterResponse, Error, UserData>(registerUser, {
+    onSuccess: (data) => { 
       console.log(data);
-      const { message } = data; //
+      const { message } = data; 
       if (message) {
         enqueueSnackbar(message, { variant: 'success' });
         navigate('/LoginForm');
       }
     },
-    onError: (err) => {
-      enqueueSnackbar(`${err.message}`, { variant: 'error' });
+    onError: (err: { message?: string }) => {
+      enqueueSnackbar(err.message || "An error occurred", { variant: 'error' });
     },
   });
       
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       mutation.mutate({ email, password, userName });
     };

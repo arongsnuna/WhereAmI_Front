@@ -21,15 +21,25 @@ const MyPage=()=> {
       bookmarkCounts: {},
     })
     const {userName, password, profilePath, description, bookmarkCounts} = currentUser;
-    const { data, isLoading } = useQuery(['user', userState.id], () =>
+    const { data:userData, isLoading:isUserDataLoading} = useQuery(['user', userState.id], () =>
         api.getData<User>(`/user/${userState.id}`)
     );
+    useEffect(()=>{
+        if(!isUserDataLoading&&userData){
+            setCurrentUser(userData);
+        }
+    }, [userData,isUserDataLoading]);
+
+    const [schedule, setSchedule] = useState(null);
+    const {data:scheduleData, isLoading:isScheduleDataLoading} = useQuery(['scehduler'],()=>
+        api.getData(`/scheduler`)
+    );
     useEffect(() => {
-      if(!isLoading&&data) {
-        setCurrentUser(data);
-        console.log('data',data);
+      if(!isScheduleDataLoading&&scheduleData){
+        setSchedule(scheduleData);
       }
-    }, [data, isLoading]);
+    }, [scheduleData, isScheduleDataLoading]);
+
     const handleLogin = () => {
       console.log(userState);
       if (userState.accessToken) {
@@ -136,14 +146,26 @@ const MyPage=()=> {
                                 </div>
                                 ))
                               }
-
                           </Slider>
                         )}
                       </div>
                   </div>
                   <div className="flex-1 ">
                       <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>일정</h2>
-                      <div className="border-gray-200 border p-4 rounded-lg"></div>
+                      <div className="border-gray-200 border p-4 rounded-lg">
+                        {bookmarkCounts && Object.keys(bookmarkCounts).length > 0 &&(
+                          <Slider {...settings}>
+                              {Object.entries(bookmarkCounts).map(([location,info])=>(
+                                <div key={location} className="flex justify-center p-2" onClick={navigateBookmarks}>
+                                  <figure>
+                                  <img src={info.imagePath}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{location}({info.count})</figcaption>
+                                  </figure>
+                                </div>
+                                ))
+                              }
+                          </Slider>
+                        )}
+                      </div>
                   </div>
               </div>
           </div>

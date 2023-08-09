@@ -5,10 +5,9 @@ import LoginForm from './pages/LoginForm';
 import RegisterForm from './pages/RegisterForm';
 import MyPage from "./pages/MyPage";
 import Bookmarks from "./pages/Bookmarks";
-
-import { loginReducer, UserState } from "./reducer/LoginReducer";
+import SchedulerResult from "./pages/SchedulerResult";
+import { UserState } from "./reducer/LoginReducer";
 import ContextProvider from './context/Context';
-import { useReducer } from "react";
 
 const initialState: UserState = {
   id:null,
@@ -17,7 +16,6 @@ const initialState: UserState = {
 };
 
 function App() {
-  const [state, dispatch] = useReducer(loginReducer, initialState);
   const header = (
     <header className="fixed bottom-0 flex justify-between">
       <nav>
@@ -37,6 +35,7 @@ function App() {
               <Route path="/RegisterForm" element={<RegisterForm />} />
               <Route path="/Mypage" element={<MyPage />} />
               <Route path="/Bookmarks" element={<Bookmarks />} />
+              <Route path="/SchedulerResult" element={<SchedulerResult />} />
             </Routes>
         </Router>
         {header}
