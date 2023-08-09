@@ -2,6 +2,7 @@ export interface UserState {
     id: string|null;
     accessToken: string | null;
     isLoggedIn: boolean;
+    bookmarks: number[];
 }
 
 function assertNever(x: never): never {
@@ -10,7 +11,9 @@ function assertNever(x: never): never {
 
 type LoginAction =
     | { type: 'LOGIN_SUCCESS'; payload: {id: string; accessToken: string} }
-    | { type: 'LOGOUT' };
+    | { type: 'LOGOUT' }
+    | { type: 'ADD_BOOKMARK'; payload: { landmarkId: number } }
+    | { type: 'REMOVE_BOOKMARK'; payload: { landmarkId: number } };
 
 export const loginReducer = (state:UserState, action:LoginAction):UserState => {
     switch (action.type) {
@@ -24,7 +27,17 @@ export const loginReducer = (state:UserState, action:LoginAction):UserState => {
             localStorage.removeItem('id');
             return { ...state, accessToken: null, id:null, isLoggedIn: false };
 
-        default:
-            return assertNever(action);
+            case 'ADD_BOOKMARK':
+                // Check if the bookmark already exists to avoid duplicates
+                if (state.bookmarks.includes(action.payload.landmarkId)) {
+                    return state; // Return current state without changes
+                }
+                return { ...state, bookmarks: [...state.bookmarks, action.payload.landmarkId] };
+    
+            case 'REMOVE_BOOKMARK':
+                return { ...state, bookmarks: state.bookmarks.filter(id => id !== action.payload.landmarkId) };
+    
+            default:
+                return assertNever(action);
     }
 };

@@ -12,7 +12,7 @@ import {LandmarkResultProps} from '../interface/landmark';
 
 const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmarks }) => {
   // 로그인된 user 확인
-  const { userState} = useContext(UserContext);
+  const { userState, dispatch } = useContext(UserContext);
   // const [landmarkConfirm, setLandmarkConfirm]= useState(false);
   // const [nearByLandmarksConfirm, setNearByLandmarksConfirm]= useState([false]);
 
@@ -50,6 +50,15 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
   // async function handleBookmark(landmarkId: number){
   //   await api.postWithAuth('/bookmarks/toggle',{landmarkId});
   // }
+  const toggleBookmark = (landmarkId?: number) => { 
+    if (!landmarkId) return; // Id가 제공되지 않을 경우 그냥 return
+  
+    if (userState.bookmarks.includes(landmarkId)) {
+      dispatch({ type: 'REMOVE_BOOKMARK', payload: { landmarkId } });
+    } else {
+      dispatch({ type: 'ADD_BOOKMARK', payload: { landmarkId } });
+    }
+  };
 
   const afterLogin=async () => {
     alert('로그인 후 이용해주세요.');
@@ -97,6 +106,12 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
                     </button>
                   );
                 }} */}
+                if (landmark.id !== undefined) {
+                    <button className="mr-4" onClick={() => landmark.id && toggleBookmark(landmark.id)}>
+                      {landmark.id && userState.bookmarks.includes(landmark.id) ? '♥' : '♡'}
+                    </button>
+                  
+                }
               </>
             )}
           </div>
@@ -130,6 +145,9 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
                         </button>
                       );
                     }} */}
+                    <button className="mr-4" onClick={() => land.id && toggleBookmark(land.id)}>
+                      {land.id && userState.bookmarks.includes(land.id) ? '♥' : '♡'}
+                    </button>
                   </>
                 )}
               </div>

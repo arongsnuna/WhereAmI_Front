@@ -13,6 +13,7 @@ interface UserState {
     id: string | null;
     accessToken: string | null;
     isLoggedIn: boolean;
+    bookmarks: number[];
 }
 
 interface ContextProviderProps {
@@ -21,12 +22,16 @@ interface ContextProviderProps {
 
 type LoginAction =
     | { type: 'LOGIN_SUCCESS'; payload: {id: string; accessToken: string} }
-    | { type: 'LOGOUT' };
+    | { type: 'LOGOUT' }
+    | { type: 'REMOVE_BOOKMARK'; payload: { landmarkId: number } }
+    | { type: 'ADD_BOOKMARK'; payload: { landmarkId: number } };
+
 
 const initialState: UserState = {
     id:null,
     accessToken: null,
     isLoggedIn: false,
+    bookmarks: [],
 };
 
 export const UserContext = createContext<{
