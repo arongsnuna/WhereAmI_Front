@@ -1,6 +1,5 @@
 import userSample from '../assets/userSample.png';
-import wherelogo from '../assets/where.png'
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -12,7 +11,7 @@ import { useQuery } from 'react-query';
 
 const MyPage=()=> {
     const navigate = useNavigate();
-    const { userState, dispatch, login } = useContext(UserContext);
+    const { userState, dispatch} = useContext(UserContext);
     const [currentUser, setCurrentUser] = useState<User>({
       userName: '',
       password: '',
@@ -20,7 +19,7 @@ const MyPage=()=> {
       description: '',
       bookmarkCounts: {},
     })
-    const {userName, password, profilePath, description, bookmarkCounts} = currentUser;
+    const {userName, profilePath, description, bookmarkCounts} = currentUser;
     const { data:userData, isLoading:isUserDataLoading} = useQuery(['user', userState.id], () =>
         api.getData<User>(`/user/${userState.id}`)
     );
@@ -30,7 +29,7 @@ const MyPage=()=> {
         }
     }, [userData,isUserDataLoading]);
 
-    const [schedule, setSchedule] = useState(null);
+    const [schedule, setSchedule] = useState({});
     const {data:scheduleData, isLoading:isScheduleDataLoading} = useQuery(['scehduler'],()=>
         api.getData(`/scheduler`)
     );
@@ -39,6 +38,7 @@ const MyPage=()=> {
         setSchedule(scheduleData);
       }
     }, [scheduleData, isScheduleDataLoading]);
+    console.log(schedule);
 
     const handleLogin = () => {
       console.log(userState);
@@ -55,20 +55,19 @@ const MyPage=()=> {
         navigate('/');
     }
 
-    const updateUserInfo = async (e: any) => {
-        e.preventDefault();
-        try{
-            //업데이트해줘야함!!!
-        }
-        catch(err){
-            console.log(err);
-        }
-    };
+    // const updateUserInfo = async (e: any) => {
+    //     e.preventDefault();
+    //     try{
+    //         //업데이트해줘야함!!!
+    //     }
+    //     catch(err){
+    //         console.log(err);
+    //     }
+    // };
     const deleteUserInfo = async(e:any) => {
         e.preventDefault();
         try{
-            const response = await api.deleteData(`/user/${userState.id}`)
-            console.log(response.message);
+            await api.deleteData(`/user/${userState.id}`)
             alert('삭제되었습니다.');
             //로그아웃 처리
             //홈화면으로 이동 - navigate 이용해서

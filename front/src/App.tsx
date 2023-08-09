@@ -6,14 +6,13 @@ import RegisterForm from './pages/RegisterForm';
 import MyPage from "./pages/MyPage";
 import Bookmarks from "./pages/Bookmarks";
 import SchedulerResult from "./pages/SchedulerResult";
-import { UserState } from "./reducer/LoginReducer";
 import ContextProvider from './context/Context';
 
-const initialState: UserState = {
-  id:null,
-  accessToken: null,
-  isLoggedIn: false,
-};
+// const initialState: UserState = {
+//   id:null,
+//   accessToken: null,
+//   isLoggedIn: false,
+// };
 
 function App() {
   const header = (

@@ -14,14 +14,14 @@ function LoginForm() {
 
   const loginMutation = useMutation(async () => {
     const response = await postData('/users/login', { userName, password });
-    const { id, accessToken } = response;
+    const { id, accessToken } = response as { id: string; accessToken: string };
 
     dispatch({ type: 'LOGIN_SUCCESS', payload: {id, accessToken} });
     navigate('/');
     return { accessToken };
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     loginMutation.mutate();
   }

@@ -2,7 +2,8 @@ export interface UserState {
     id: string|null;
     accessToken: string | null;
     isLoggedIn: boolean;
-    }
+}
+
 function assertNever(x: never): never {
     throw new Error(`Unexpected object: ${x}`);
 }
@@ -14,8 +15,8 @@ type LoginAction =
 export const loginReducer = (state:UserState, action:LoginAction):UserState => {
     switch (action.type) {
         case 'LOGIN_SUCCESS':
-            localStorage.setItem('accessToken', action.payload.accessToken);
             localStorage.setItem('id', action.payload.id);
+            localStorage.setItem('accessToken', action.payload.accessToken);
             return { ...state, accessToken: action.payload.accessToken, id:action.payload.id, isLoggedIn: true };
 
         case 'LOGOUT':

@@ -6,21 +6,19 @@ import 'slick-carousel/slick/slick-theme.css';
 import { UserContext } from '../context/Context';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-
-
+import { BookmarkZip } from '../interface/bookmark';
 
 const Bookmarks=()=>{
-    const { userState, dispatch, login } = useContext(UserContext);
-    const [bookmarkZip, setBookmarkZip] = useState(null);
+    const { userState, dispatch} = useContext(UserContext);
+    const [bookmarkZip, setBookmarkZip] = useState<BookmarkZip[]>([]);
     const { data, isLoading } = useQuery(['bookmarks', userState.id], () =>
-        api.getData(`/bookmarks/user`)
+        api.getData<BookmarkZip[]>(`/bookmarks/user`)
     );
     useEffect(() => {
       if(!isLoading&&data) {
         setBookmarkZip(data);
       }
     }, [data, isLoading]);
-    console.log(bookmarkZip);
     const buttonText = userState.accessToken ? '로그아웃' : '로그인';
     const navigate = useNavigate();
     const handleLogin = () => {
@@ -64,12 +62,12 @@ const Bookmarks=()=>{
                 </div>
             </div>
             {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
-                bookmarkZip.map((item,index)=>(
+                bookmarkZip.map((item:any)=>(
                     <div className="w-9/10 border border-gray-200 rounded m-2 justify-centertext-bold">
                         <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='m-3'>{item.siDo}</h2>
                             <div>
                             <Slider {...settings}>
-                                {item.bookmarks.map((bookmark,idx)=>(
+                                {item.bookmarks.map((bookmark:any)=>(
                                     <figure>
                                     <img src={bookmark.imagePath}/><figcaption style={{fontFamily:'GmarketSansMedium'}} className='text-center m-1'>{bookmark.name}</figcaption>
                                     </figure>

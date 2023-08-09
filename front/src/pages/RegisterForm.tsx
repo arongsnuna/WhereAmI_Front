@@ -35,9 +35,9 @@ function RegisterForm() {
   const navigate = useNavigate();
 
   const mutation = useMutation<RegisterResponse, Error, UserData>(registerUser, {
-    onSuccess: (data) => { 
+    onSuccess: (data) => {
       console.log(data);
-      const { message } = data; 
+      const { message } = data;
       if (message) {
         enqueueSnackbar(message, { variant: 'success' });
         navigate('/LoginForm');
@@ -47,12 +47,10 @@ function RegisterForm() {
       enqueueSnackbar(err.message || "An error occurred", { variant: 'error' });
     },
   });
-      
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       e.preventDefault();
       mutation.mutate({ email, password, userName });
     };
-  
 
     return (
       <>

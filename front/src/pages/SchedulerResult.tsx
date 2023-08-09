@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useQuery } from 'react-query';
 import * as api from '../api/index';
 import { UserContext } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
 
 const SchedulerResult=()=> {
-    const { userState, dispatch, login } = useContext(UserContext);
-    const [schedule, setSchedule] = useState(null);
+    const { userState, dispatch } = useContext(UserContext);
+    const [schedule, setSchedule] = useState({});
     const {data, isLoading} = useQuery(['scehduler'],()=>
         api.getData(`/scheduler`)
     );

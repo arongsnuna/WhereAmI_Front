@@ -4,11 +4,20 @@ import { loginReducer } from '../reducer/LoginReducer';
 import * as Api from '../api/index';
 import jwtDecode from 'jwt-decode';
 
+interface LoginResult {
+    id: string;
+    accessToken: string;
+}
+
 interface UserState {
-    id: string |null;
+    id: string | null;
     accessToken: string | null;
     isLoggedIn: boolean;
-    }
+}
+
+interface ContextProviderProps {
+    children: ReactNode;
+}
 
 type LoginAction =
     | { type: 'LOGIN_SUCCESS'; payload: {id: string; accessToken: string} }
@@ -18,51 +27,46 @@ const initialState: UserState = {
     id:null,
     accessToken: null,
     isLoggedIn: false,
-    };
-
-// interface ContextProviderProps {
-//         children: ReactNode;
-//     }
-
+};
 
 export const UserContext = createContext<{
     userState: UserState;
     dispatch: React.Dispatch<LoginAction>;
     login: (userName: string, password: string) => void;
+    logout: () => void;
     }>({
     userState: initialState,
     dispatch: () => undefined,
     login: () => undefined,
-    });
+    logout: () => undefined,
+});
 
-    const ContextProvider: React.FC = ({ children }: React.PropsWithChildren<{}>): React.ReactElement => {
-        const [userState, dispatch] = useReducer(loginReducer, initialState);
-        const queryClient = useQueryClient();
-
-        useEffect(() => {
-            const storedToken = localStorage.getItem('accessToken');
-            const id = localStorage.getItem('id');
-            console.log('Stored token: ', storedToken);
-            if (storedToken) {
-                try {
-                    const parsedUser = jwtDecode(storedToken);
-                    console.log('Parsed user:', parsedUser);
-                    dispatch({ type: 'LOGIN_SUCCESS', payload: {id, accessToken: storedToken}});
-                } catch(e) {
-                    console.error('Error parsing stored token:', e);
-                }
+const ContextProvider: React.FC<ContextProviderProps> = ({ children }): React.ReactElement => {
+    const [userState, dispatch] = useReducer(loginReducer, initialState);
+    const queryClient = useQueryClient();
+    useEffect(() => {
+        const storedToken = localStorage.getItem('accessToken');
+        const id = localStorage.getItem('id');
+        if (storedToken) {
+            try {
+                const parsedUser = jwtDecode(storedToken);
+                console.log('Parsed user:', parsedUser);
+                dispatch({ type: 'LOGIN_SUCCESS', payload: {id: id || '', accessToken: storedToken}});
+            } catch(e) {
+                console.error('Error parsing stored token:', e);
             }
-        }, []);
+        }
+    }, []);
 
-    const loginUser = useMutation(
-        (data: { username: string; password: string }) => Api.postData('/users/login', data),
+    const loginUser = useMutation<LoginResult, unknown, { username: string; password: string }>(
+        (data: { username: string; password: string }) => Api.postData<LoginResult>('/users/login', data),
         {
-            onSuccess: (response) => {
-                console.log(response.data);
-                const { id, accessToken } = response.data;
-                const decodedToken = jwtDecode(accessToken); // 토큰 디코드
-                console.log('Decoded token:', decodedToken); // 디코드 토큰 디버깅
-                dispatch({ type: 'LOGIN_SUCCESS', payload: {id: id, accessToken: decodedToken} }); // 디코딩된 토큰을 payload에 dispatch
+            onSuccess: (response: LoginResult) => {
+                const { id, accessToken } = response;
+                const decodedToken = jwtDecode(accessToken) as  string; // 토큰 디코드
+                localStorage.setItem('accessToken', decodedToken);
+                localStorage.setItem('id', id);
+                dispatch({ type: 'LOGIN_SUCCESS', payload: {id, accessToken: decodedToken} }); // 디코딩된 토큰을 payload에 dispatch
             },
 
             onError: () => {
@@ -77,9 +81,14 @@ export const UserContext = createContext<{
     const login = (username: string, password: string) => {
         loginUser.mutate({ username, password });
     };
+    const logout = () => {
+        localStorage.removeItem('user');
+        dispatch({ type: 'LOGOUT' });
+    };
+
 
     return (
-        <UserContext.Provider value={{ userState, dispatch, login }}>{children}</UserContext.Provider>
+        <UserContext.Provider value={{ userState, dispatch, login,logout }}>{children}</UserContext.Provider>
         );
     };
 

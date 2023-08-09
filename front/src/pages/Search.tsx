@@ -7,6 +7,7 @@ import LandmarkResult from '../components/LandmarkResult';
 import "../global.css";
 import { UserContext } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
+import {Landmark, LandmarkResultProps} from '../interface/landmark';
 
 
 const Search = () => {
@@ -15,14 +16,14 @@ const Search = () => {
     const config = {
         headers: { 'Content-Type': 'multipart/form-data' },
     };
-    const [landmark, setLandmark] = useState(null);
-    const [nearByLandmarks, setNearByLandmarks] = useState(null);
+    const [landmark, setLandmark] = useState<Landmark>()
+    const [nearByLandmarks, setNearByLandmarks] = useState<Landmark[]>([]);
 
     const handleImageUpload = async (file: File) => {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            const response = await postData('/image', formData, config);
+            const response:LandmarkResultProps = await postData('/image', formData, config);
             await setLandmark(response.landmark);
             await setNearByLandmarks(response.nearByLandmarks);
         } catch (err) {
@@ -37,7 +38,7 @@ const Search = () => {
         }
     }
     const navigate = useNavigate();
-    const { userState, dispatch, login } = useContext(UserContext);
+    const { userState, dispatch } = useContext(UserContext);
     useEffect(() => {
         console.log("User state updated:", userState);
     }, [userState]);
