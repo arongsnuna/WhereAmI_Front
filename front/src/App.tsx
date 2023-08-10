@@ -35,9 +35,8 @@ function App() {
               <Route path="/RegisterForm" element={<RegisterForm />} />
               <Route path="/Mypage" element={<MyPage />} />
               <Route path="/Bookmarks" element={<Bookmarks />} />
-              <Route path="/SchedulerResult" element={<SchedulerResult />} />
+              <Route path="/SchedulerResult/:schedulerId" element={<SchedulerResult />} />
               <Route path="/UpdateMyPage" element={<UpdateMyPage />} />
-
             </Routes>
         </Router>
         {header}

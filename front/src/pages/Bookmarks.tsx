@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext,  useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import * as api from '../api/index';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -22,7 +22,6 @@ const Bookmarks=()=>{
     const buttonText = userState.accessToken ? '로그아웃' : '로그인';
     const navigate = useNavigate();
     const handleLogin = () => {
-        console.log(userState);
         if (userState.accessToken) {
             dispatch({ type: 'LOGOUT' });
         } else {
@@ -71,16 +70,16 @@ const Bookmarks=()=>{
             </div>
             {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                 bookmarkZip.map((item:any)=>(
-                    <div className="w-9/10 border border-gray-200 rounded m-2 justify-centertext-bold" key={item.siDo}>
+                    <div className="w-9/10 border border-gray-200 rounded m-2 justify-center text-bold" key={item.siDo}>
                         <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
                         <div>
                             <Slider {...settings}>
                                 {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                     <figure className="flex justify-center p-2" key={imgIndex}>
                                         <img
-                                            // style={{
-                                            //     border: `4px solid ${selectedImgIndex === imgIndex ? 'blue' : 'black'}`
-                                            // }}
+                                            style={{
+                                                border: `4px solid ${selectedImgIndex === imgIndex ? 'blue' : 'black'}`
+                                            }}
                                             onClick={() => handleImgClick(imgIndex, bookmark.name)}
                                             src={bookmark.imagePath}
                                         />
