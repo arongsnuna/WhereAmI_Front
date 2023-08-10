@@ -17,7 +17,7 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
   //user의 전체 북마크 모음
   const [bookmarkZip, setBookmarkZip] = useState<Bookmark>();
   const { data: bookmarkZipData, isLoading: isBookmarkZipLoading } = useQuery(['bookmarkZip', userState.id], () =>
-    api.getData<Bookmark>(`/bookmarks/bookmarks`)
+    api.getData<Bookmark>(`/bookmarks`)
   );
   useEffect(() => {
     async function fetchData() {

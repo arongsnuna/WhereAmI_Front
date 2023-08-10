@@ -40,6 +40,11 @@ const MyPage=()=> {
         setSchedule(scheduleData);
       }
     }, [scheduleData, isScheduleDataLoading]);
+    console.log(schedule);
+
+    const handleSchedulerClick = (schedulerId: number)=>{
+      navigate(`/SchedulerResult/${schedulerId}`);
+    }
 
     // 로그인, user 받아오기
     const handleLogin = () => {
@@ -153,7 +158,7 @@ const MyPage=()=> {
                               {Object.entries(schedule).map(([s,info])=>(
                                 <div key={s} className="flex justify-center p-2" >
                                   <figure>
-                                  <img src={info.imagePath}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{info.title}</figcaption>
+                                  <img src={info.imagePath} onClick={()=>handleSchedulerClick(info.schedulerId)}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{info.title}</figcaption>
                                   </figure>
                                 </div>
                                 ))

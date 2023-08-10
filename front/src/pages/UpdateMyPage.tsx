@@ -1,10 +1,10 @@
 import {MyUser} from '../interface/user';
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as api from '../api/index';
 import { UserContext } from '../context/Context';
 import { useQuery } from 'react-query';
-import userSample from '../assets/userSample.png';
+//import userSample from '../assets/userSample.png';
 
 const UpdateMyPage = () =>{
     const { userState, dispatch} = useContext(UserContext);
@@ -17,7 +17,7 @@ const UpdateMyPage = () =>{
     const [myDescription, setMyDescription] = useState('');
     //const [myProfilePath, setMyProfilePath] = useState(profilePath);
     //const [previewPhoto, setPreviewPhoto] = useState(userSample);
-    console.log(myUserName, myDescription);
+    console.log(currentUser);
 
     useEffect(()=>{
         if(!isUserDataLoading&&userData){

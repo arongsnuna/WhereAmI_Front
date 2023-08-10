@@ -1,4 +1,4 @@
-interface ScheduleItem {
+export interface ScheduleItem {
     name: string;
     time: string;
     address: string;
@@ -7,6 +7,7 @@ interface ScheduleItem {
     description: string;
     recommendPlace: string;
     transportation: string;
+    imagePath: string;
 }
 
 export interface TripSchedule {
@@ -14,9 +15,9 @@ export interface TripSchedule {
     title: string;
     startDate: string;
     endDate: string;
-    schedule: {
+    schedule: [{
         [date: string]: ScheduleItem[];
-    };
+    }];
     userId: string;
 }
 
