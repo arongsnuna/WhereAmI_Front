@@ -24,6 +24,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, siDo, imagePat
     const deleteBookmark = async(landmarkId: number)=>{
         await api.deleteData<Bookmark>(`/bookmarks/${landmarkId}`);
         alert('삭제되었습니다!');
+        onClose();
         navigate('/Bookmarks');
     }
     return (
