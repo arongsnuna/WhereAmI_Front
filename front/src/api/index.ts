@@ -25,11 +25,18 @@ export const getData = async <T>(url: string, config?: AxiosRequestConfig): Prom
 };
 
 //TODO: POST 메서드
-export const postData = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+export const postData = async <T>(url: string, data: any, config?: AxiosRequestConfig): Promise<T> => {
   try {
-    const response = await client.post<T>(url, data, config);
+    const token = localStorage.getItem('accessToken');
+    const configWithToken = {
+      ...config,
+      headers: {
+        ...config?.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await client.post<T>(url, data, configWithToken);
     return response.data;
-
   } catch (error: any) {
     throw new Error(error.message);
   }

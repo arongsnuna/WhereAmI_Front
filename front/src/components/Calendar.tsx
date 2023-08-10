@@ -19,6 +19,7 @@ function CalendarComponent() {
     const [endDate, setEndDate] = useState<string | null>(null);
 
     const token = localStorage.getItem('accessToken');
+    console.log("Token from LocalStorage:", token);
 
     const mutation = useMutation(() => {
         return postData<ScheduleResponseType>('/scheduler/ask', {
@@ -28,10 +29,6 @@ function CalendarComponent() {
             userId: "someUserId",
             startDate: startDate,
             endDate: endDate
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
         });
     }, {
         onSuccess: () => {
