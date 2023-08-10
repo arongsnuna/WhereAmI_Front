@@ -53,3 +53,17 @@
   visibility: visible;
   opacity: 1;
 }
+
+ul.slick-dots{
+  padding:10px;
+}
+body {
+  padding-bottom: 60px; /* 헤더의 높이만큼 본문 하단 패딩 설정 */
+}
+
+/* 반응형 padding-bottom 조절 */
+@media screen and (min-width: 645px) {
+  body {
+    padding-bottom: calc(60px + 3rem); /* 헤더의 높이 + 원하는 추가 크기 */
+  }
+}

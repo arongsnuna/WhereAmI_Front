@@ -64,6 +64,9 @@ const MyPage=()=> {
     const navigateUpdate = ()=>{
         navigate('/UpdateMyPage');
     }
+    const navigateAllSchedule = ()=>{
+      navigate('/AllSchedule');
+    }
     const deleteUserInfo = async(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try{
@@ -104,88 +107,96 @@ const MyPage=()=> {
                 <div className='w-1/5'></div>
                 <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                    <button style={{ fontFamily: 'GmarketSansMedium' }}
+                      className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                         {buttonText}
                     </button>
                 </div>
           </div>
           {!userState.accessToken? (
-              <h1 className='text-center mt-10'>로그인 후 이용해주세요.</h1>
+              <h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로그인 후 이용해주세요.</h1>
           ) :
           (<>
-          <div className="flex">
-              <div className="w-1/3 px-5">
-              <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>마이페이지</h2>
-                  <div className="border border-gray-200 p-4 rounded-lg">
-                      <div className='flex items-center justify-center'>
-                        {profilePath?(
-                          <img src={profilePath} className='w-1/4 m-4' />
-                        ):(
-                          <img src={userSample} className='w-1/4 m-4' />
-                        )}
-                      </div>
-                      <p className="mb-2">
-                      <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>이름: {userName}</span>
-                      </p>
-                      <p className="mb-2">
-                      <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>자기소개: {description}</span>
-                      </p>
-                  </div>
+            {currentUser&&bookmarkCounts&&schedule?(
+              <>
+                <div className="flex">
+                <div className="w-1/3 px-5">
+                <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 text-s sm:text-m text-center'>마이페이지</h2>
+                    <div className="border border-gray-200 p-4 rounded-lg">
+                        <div className='flex items-center justify-center'>
+                          {profilePath?(
+                            <img src={profilePath} className='w-1/4 m-4' />
+                          ):(
+                            <img src={userSample} className='w-1/4 m-4' />
+                          )}
+                        </div>
+                        <p className="mb-2 text-xs sm:text-base">
+                        <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>이름: {userName}</span>
+                        </p>
+                        <p className="mb-2 text-xs sm:text-base">
+                        <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>자기소개: {description}</span>
+                        </p>
+                    </div>
+                </div>
+                <div className="w-2/3 flex flex-col pr-5">
+                    <div className="flex-1">
+                        <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 text-s sm:text-m text-center'>북마크</h2>
+                        <div className="border-gray-200 border rounded-lg items-center mb-1 pt-3 pb-4" >
+                          {bookmarkCounts && Object.keys(bookmarkCounts).length > 0 &&(
+                            <Slider {...settings}>
+                                {Object.entries(bookmarkCounts).map(([location,info])=>(
+                                  <div key={location} className="flex justify-center p-2 text-xs sm:text-base" onClick={navigateBookmarks}>
+                                    <figure>
+                                    <img src={info.imagePath} className='mb-2'/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{location} ({info.count})</figcaption>
+                                    </figure>
+                                  </div>
+                                  ))
+                                }
+                            </Slider>
+                          )}
+                        </div>
+                    </div>
+                    <div className="flex-1 mt-5">
+                        <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 text-s sm:text-m text-center'>일정</h2>
+                        <div className="border-gray-200 border p-4 rounded-lg">
+                          {schedule && Object.keys(schedule).length > 0 &&(
+                            <Slider {...settings}>
+                                {Object.entries(schedule).map(([s,info])=>(
+                                  <div key={s} className="flex justify-center p-2 text-xs sm:text-base" onClick={navigateAllSchedule}>
+                                    <figure>
+                                    <img src={info.imagePath} onClick={()=>handleSchedulerClick(info.schedulerId)} className='mb-2'/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>[{info.title}]</figcaption>
+                                    </figure>
+                                  </div>
+                                  ))
+                                }
+                            </Slider>
+                          )}
+                        </div>
+                    </div>
+                </div>
               </div>
-              <div className="w-2/3 flex flex-col pr-5">
-                  <div className="flex-1">
-                      <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>북마크</h2>
-                      <div className="border-gray-200 border rounded-lg items-center mb-8 pt-3" >
-                        {bookmarkCounts && Object.keys(bookmarkCounts).length > 0 &&(
-                          <Slider {...settings}>
-                              {Object.entries(bookmarkCounts).map(([location,info])=>(
-                                <div key={location} className="flex justify-center p-2" onClick={navigateBookmarks}>
-                                  <figure>
-                                  <img src={info.imagePath}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{location}({info.count})</figcaption>
-                                  </figure>
-                                </div>
-                                ))
-                              }
-                          </Slider>
-                        )}
-                      </div>
-                  </div>
-                  <div className="flex-1 ">
-                      <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>일정</h2>
-                      <div className="border-gray-200 border p-4 rounded-lg">
-                        {schedule && Object.keys(schedule).length > 0 &&(
-                          <Slider {...settings}>
-                              {Object.entries(schedule).map(([s,info])=>(
-                                <div key={s} className="flex justify-center p-2" >
-                                  <figure>
-                                  <img src={info.imagePath} onClick={()=>handleSchedulerClick(info.schedulerId)}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{info.title}</figcaption>
-                                  </figure>
-                                </div>
-                                ))
-                              }
-                          </Slider>
-                        )}
-                      </div>
-                  </div>
+              <div className="flex justify-center mt-4">
+                <button
+                        className="m-1 bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base"
+                        type="submit"
+                        style={{fontFamily:'GmarketSansMedium'}}
+                        onClick = {navigateUpdate}
+                    >
+                        Update User Info
+                    </button>
+                <button
+                    className="m-1 bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base"
+                    onClick={deleteUserInfo}
+                    style={{fontFamily:'GmarketSansMedium'}}
+                >
+                    Delete User Info
+                </button>
               </div>
-          </div>
-          <div className="flex justify-center mt-4">
-              <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
-                      type="submit"
-                      style={{fontFamily:'GmarketSansMedium'}}
-                      onClick = {navigateUpdate}
-                  >
-                      Update User Info
-                  </button>
-              <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
-                  onClick={deleteUserInfo}
-                  style={{fontFamily:'GmarketSansMedium'}}
-              >
-                  Delete User Info
-              </button>
-          </div>
+              </>
+
+            ):(
+              <h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중...</h1>
+            )}
           </>)
           }
         </>

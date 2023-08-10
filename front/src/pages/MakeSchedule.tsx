@@ -87,7 +87,9 @@ const MakeSchedule=()=>{
 
     // api 보내기
     const token = localStorage.getItem('accessToken');
+    const [isSaving, setIsSaving] = useState(false);
     const makeScheduleApi = async()=>{
+        setIsSaving(true);
         const response = await api.postData<TripSchedule>(`/scheduler`,{
             place: selectedImgPathString,
             date: dates,
@@ -99,7 +101,7 @@ const MakeSchedule=()=>{
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        });
+        })
         navigate(`/SchedulerResult/${response.id}`);
     }
     // 제목 받아오기
@@ -129,7 +131,8 @@ const MakeSchedule=()=>{
                 <div className='w-1/5'></div>
                 <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                    <button style={{ fontFamily: 'GmarketSansMedium' }}
+                        className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                         {buttonText}
                     </button>
                 </div>
@@ -140,7 +143,7 @@ const MakeSchedule=()=>{
                 </div>
                 <div className='flex justify-center items-center' style={{ fontFamily: 'GmarketSansMedium' }} >
                     {selectedImgPathString.length > 0? (
-                            <div>
+                            <div className='m-2'>
                                 <div className='flex w-full justify-center'>
                                     <p className='flex justify-center items-center font-bold font-l'>선택한 장소:</p>
                                     </div>
@@ -148,40 +151,26 @@ const MakeSchedule=()=>{
                                         <p className='w-full justify-center items-center'>{selectedImgPathString}</p>
                                 </div>
                             </div>
-                        ):(<div>
+                        ):(<div className='m-2'>
                                 <div className='flex w-full justify-center'>
-                                    <p className='flex justify-center items-center'>선택한 장소: 없음</p>
+                                    <p className='flex justify-center items-center font-bold'>선택한 장소: 없음</p>
                                 </div>
                                 <div>
-                                    <p className='w-full justify-center items-center font-xs'>아래 북마크에서 선택하세요.</p>
+                                    <p className='w-full justify-center items-center font-2xs'>*아래 북마크에서 선택하세요.</p>
                                 </div>
                             </div>)
                     }
                 </div>
-                <input
-                    type="text"
-                    placeholder="일정 제목 입력"
-                    onChange={(e) => setScheduleTitle(e.target.value)}
-                    style={{ textAlign: 'center', }}
-                />
-                <div className='justify-center items-center' style={{ fontFamily: 'GmarketSansMedium' }}>
-                    <div className='justify-center items-center flex w-full'>
-                        <p>일정 시작 날짜:</p>
-                    </div>
-                    <div className='justify-center items-center flex w-full'>
-                        <p>{startDate?(<p className='w-full justify-center items-center'>{startDate}</p>):(<p className='w-full justify-center items-center'>미정</p>)}</p>
-                    </div>
-                </div>
-                <div className='justify-center items-center' style={{ fontFamily: 'GmarketSansMedium' }}>
-                    <div className='justify-center items-center flex w-full'>
-                        <p>일정 끝 날짜:</p>
-                    </div>
-                    <div className='justify-center items-center flex w-full'>
-                        <p>{endDate?(<p className='w-full justify-center items-center'>{endDate}</p>):(<p className='w-full justify-center items-center'>미정</p>)}</p>
-                    </div>
+                <div className='flex justify-center items-center'>
+                    <input
+                        type="text"
+                        placeholder="일정 제목 입력"
+                        onChange={(e) => setScheduleTitle(e.target.value)}
+                        style={{ textAlign: 'center', }}
+                    />
                 </div>
                 <div className='flex justify-center items-center'>
-                    <Button onClick={openModal} className="mt-5">
+                    <Button onClick={openModal} className="m-2">
                         날짜 선택하기
                     </Button>
 
@@ -201,9 +190,29 @@ const MakeSchedule=()=>{
                         />
                     </Modal>
                 </div>
-                <Button onClick={()=>makeScheduleApi()} className="mt-5">
-                    일정 만들기
-                </Button>
+                <div className='justify-center items-center' style={{ fontFamily: 'GmarketSansMedium' }}>
+                    <div className='justify-center items-center flex w-full'>
+                        <p>일정 시작 날짜:</p>
+                    </div>
+                    <div className='justify-center items-center flex w-full'>
+                        <p>{startDate?(<p className='w-full justify-center items-center'>{startDate}</p>):(<p className='w-full justify-center items-center'>미정</p>)}</p>
+                    </div>
+                </div>
+                <div className='justify-center items-center' style={{ fontFamily: 'GmarketSansMedium' }}>
+                    <div className='justify-center items-center flex w-full'>
+                        <p>일정 끝 날짜:</p>
+                    </div>
+                    <div className='justify-center items-center flex w-full'>
+                        <p>{endDate?(<p className='w-full justify-center items-center'>{endDate}</p>):(<p className='w-full justify-center items-center'>미정</p>)}</p>
+                    </div>
+                </div>
+                <div className='flex justify-center items-center'>
+                    <Button style={{ fontFamily: 'GmarketSansMedium' }}
+                        className="bg-cyan-300 text-gray-800 font-bold rounded text-xs sm:text-base"
+                        onClick={()=>makeScheduleApi()} disabled={isSaving}>
+                        {isSaving ? '일정 만드는 중...' : '일정 만들기'}
+                    </Button>
+                </div>
             </div>
             {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                 bookmarkZip.map((item:any)=>(
@@ -226,7 +235,7 @@ const MakeSchedule=()=>{
                             </div>
                         </div>
                 ))
-            ):(<h1>북마크 로딩 중..</h1>)
+            ):(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)
             }
 
 

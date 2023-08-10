@@ -94,7 +94,7 @@ const SchedulerResult=()=> {
         slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
         arrow: null, // 이전 화살표를 숨김
         draggable : true, //드래그 가능 여부
-        initialSlide: 0, // 첫 번째 슬라이드를 보이게 설정
+        initialSlide: 1, // 첫 번째 슬라이드를 보이게 설정
         responsive: [ // 반응형 웹 구현 옵션
 					{
 						breakpoint: 640, //화면 사이즈 768px
@@ -111,7 +111,7 @@ const SchedulerResult=()=> {
                 <div className='w-1/5'></div>
                 <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                    <button className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                         {buttonText}
                     </button>
                 </div>

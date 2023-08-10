@@ -78,7 +78,8 @@ const Search = () => {
         {!landmark &&
             <div>
                 <div className='w-full flex justify-end pt-5 pr-5'>
-                        <button style={{ fontFamily: 'GmarketSansMedium' }} className=" bg-cyan-200 hover:bg-cyan-400 text-gray-800 font-bold py-1 px-1 md:py-2 md:px-2 lg:py-3 lg:px-3 rounded-lg my-auto text-xs sm:text-base " onClick={handleLogin}>
+                        <button style={{ fontFamily: 'GmarketSansMedium' }} 
+                            className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                             {buttonText}
                         </button>
                 </div>

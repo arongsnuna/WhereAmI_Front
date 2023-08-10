@@ -9,16 +9,11 @@ import SchedulerResult from "./pages/SchedulerResult";
 import UpdateMyPage from "./pages/UpdateMyPage";
 import MakeSchedule from "./pages/MakeSchedule";
 import ContextProvider from './context/Context';
-
-// const initialState: UserState = {
-//   id:null,
-//   accessToken: null,
-//   isLoggedIn: false,
-// };
+import AllSchedule from "./pages/AllSchedule";
 
 function App() {
   const header = (
-    <header className="fixed bottom-0 flex justify-center bg-light-blue w-full p-2">
+    <header className="fixed bottom-0 flex justify-center bg-light-blue w-full p-2" >
       <nav className="flex justify-around items-center w-full space-x-2">
         <a href="/" className="tooltip">
           <img
@@ -52,7 +47,7 @@ function App() {
           <span className="tooltip-text">북마크</span>
         </a>
 
-        <a href="/SchedulerResult" className="tooltip">
+        <a href="/AllSchedule" className="tooltip">
           <img
             src="/public/images/schedules2.png"
             alt="일정 아이콘"
@@ -76,9 +71,12 @@ function App() {
               <Route path="/SchedulerResult/:schedulerId" element={<SchedulerResult />} />
               <Route path="/UpdateMyPage" element={<UpdateMyPage />} />
               <Route path="/MakeSchedule" element={<MakeSchedule />} />
+              <Route path="/AllSchedule" element={<AllSchedule />} />
             </Routes>
         </Router>
-        {header}
+        <div  style={{ position: 'relative' }}>
+          {header}
+        </div>
       </ContextProvider>
     </div>
   )

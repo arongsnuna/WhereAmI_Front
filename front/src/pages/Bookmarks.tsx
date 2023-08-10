@@ -60,36 +60,43 @@ const Bookmarks=()=>{
                 <div className='w-1/5'></div>
                 <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                    <button style={{ fontFamily: 'GmarketSansMedium' }}
+                        className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                         {buttonText}
                     </button>
                 </div>
             </div>
-            {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
-                bookmarkZip.map((item:any)=>(
-                    <div className="w-9/10 border border-gray-200 rounded m-2 justify-center text-bold" key={item.siDo}>
-                        <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
-                        <div>
-                            <Slider {...settings}>
-                                {item.bookmarks.map((bookmark: any, imgIndex: number) => (
-                                    <figure className="flex justify-center p-2" key={imgIndex}>
-                                        <img src={bookmark.imagePath}/>
-                                        <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
-                                            {bookmark.name}
-                                        </figcaption>
-                                    </figure>
-                                ))}
-                            </Slider>
+            {!userState.accessToken?(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로그인 후 이용해주세요!</h1>):(
+                <>
+                    {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
+                        bookmarkZip.map((item:any)=>(
+                            <div className="w-9/10 border border-gray-200 rounded m-2 justify-center text-bold" key={item.siDo}>
+                                <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
+                                <div>
+                                    <Slider {...settings}>
+                                        {item.bookmarks.map((bookmark: any, imgIndex: number) => (
+                                            <figure className="flex justify-center p-3" key={imgIndex}>
+                                                <img src={bookmark.imagePath}/>
+                                                <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
+                                                    {bookmark.name}
+                                                </figcaption>
+                                            </figure>
+                                        ))}
+                                    </Slider>
+                                </div>
+                            </div>
+                        ))
+                    ):((<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>))
+                    }
+                    {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
+                        <div className='flex justify-center items-center'>
+                            <Button onClick={navigateMakeSchedule} className="mt-5">
+                                일정 만들러가기
+                            </Button>
                         </div>
-                    </div>
-                ))
-            ):(<h1>로딩 중..</h1>)
-            }
-             <div className='flex justify-center items-center'>
-                <Button onClick={navigateMakeSchedule} className="mt-5">
-                    일정 만들러가기
-                </Button>
-            </div>
+                    ):(<p></p>)}
+                </>
+            )}
 
         </div>
     )
