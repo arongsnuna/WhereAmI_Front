@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,  useRef } from 'react';
 import * as api from '../api/index';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -32,6 +32,15 @@ const Bookmarks=()=>{
     const navigateHome= ()=>{
         navigate('/');
     }
+
+    // img 클릭
+    const [selectedImgIndex, setSelectedImgIndex] = useState<number | null>(null);
+    const [selectedImgPath, setSelectedImgPath] = useState<string[]>([]); // 추가된 부분
+
+    const handleImgClick = (index: number, name: string) => {
+        setSelectedImgIndex(index);
+        setSelectedImgPath(prevPaths =>[...prevPaths, name])
+    };
     const settings = {
         dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
         infinite: false, // 무한 반복 (true: 무한 반복, false: 끝에 도달하면 정지)
@@ -40,7 +49,6 @@ const Bookmarks=()=>{
         slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
         arrow: null, // 이전 화살표를 숨김
         draggable : true, //드래그 가능 여부
-        margin: '50px',
         responsive: [ // 반응형 웹 구현 옵션
 					{
 						breakpoint: 768, //화면 사이즈 768px
@@ -63,23 +71,43 @@ const Bookmarks=()=>{
             </div>
             {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                 bookmarkZip.map((item:any)=>(
-                    <div className="w-9/10 border border-gray-200 rounded m-2 justify-centertext-bold">
-                        <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='m-3'>{item.siDo}</h2>
-                            <div>
+                    <div className="w-9/10 border border-gray-200 rounded m-2 justify-centertext-bold" key={item.siDo}>
+                        <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
+                        <div>
                             <Slider {...settings}>
-                                {item.bookmarks.map((bookmark:any)=>(
-                                    <figure>
-                                    <img src={bookmark.imagePath}/><figcaption style={{fontFamily:'GmarketSansMedium'}} className='text-center m-1'>{bookmark.name}</figcaption>
+                                {item.bookmarks.map((bookmark: any, imgIndex: number) => (
+                                    <figure className="flex justify-center p-2" key={imgIndex}>
+                                        <img
+                                            // style={{
+                                            //     border: `4px solid ${selectedImgIndex === imgIndex ? 'blue' : 'black'}`
+                                            // }}
+                                            onClick={() => handleImgClick(imgIndex, bookmark.name)}
+                                            src={bookmark.imagePath}
+                                        />
+                                        <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
+                                            {bookmark.name}
+                                        </figcaption>
                                     </figure>
-
                                 ))}
                             </Slider>
-                            </div>
-
+                        </div>
                     </div>
                 ))
             ):(<p></p>)
             }
+
+            {/* 선택한 이미지의 주소를 표시 */}
+            {selectedImgPath.length > 0 && (
+                <div>
+                    <p>선택한 이미지 주소:</p>
+                    <ul>
+                        {selectedImgPath.map((path, index) => (
+                            <li key={index}>{path}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            {selectedImgPath}
 
         </div>
     )

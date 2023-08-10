@@ -10,3 +10,12 @@ export interface User{
         }
     };
 }
+
+export interface MyUser{
+    id:string;
+    userName:string;
+    email:string;
+    profilePath:string;
+    createdAt:string;
+    description:string;
+}

@@ -6,6 +6,7 @@ import RegisterForm from './pages/RegisterForm';
 import MyPage from "./pages/MyPage";
 import Bookmarks from "./pages/Bookmarks";
 import SchedulerResult from "./pages/SchedulerResult";
+import UpdateMyPage from "./pages/UpdateMyPage";
 import ContextProvider from './context/Context';
 
 // const initialState: UserState = {
@@ -35,6 +36,8 @@ function App() {
               <Route path="/Mypage" element={<MyPage />} />
               <Route path="/Bookmarks" element={<Bookmarks />} />
               <Route path="/SchedulerResult" element={<SchedulerResult />} />
+              <Route path="/UpdateMyPage" element={<UpdateMyPage />} />
+
             </Routes>
         </Router>
         {header}

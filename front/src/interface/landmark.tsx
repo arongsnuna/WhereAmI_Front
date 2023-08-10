@@ -6,6 +6,13 @@ export interface Landmark {
     landmarkId?: number;
   }
 export interface LandmarkResultProps {
-landmark: Landmark;
-nearByLandmarks: Landmark[];
+landmark: LandmarkSearch;
+nearByLandmarks: LandmarkSearch[];
+}
+export interface LandmarkSearch{
+  address:string;
+  areaId: number;
+  id:number;
+  imagePath:string;
+  name:string;
 }

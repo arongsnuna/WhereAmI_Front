@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import * as api from '../api/index';
 import { UserContext } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
+import { TripSchedule } from '../interface/scheduleResult';
 
 const SchedulerResult=()=> {
     const { userState, dispatch } = useContext(UserContext);

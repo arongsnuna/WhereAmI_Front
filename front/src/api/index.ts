@@ -45,6 +45,25 @@ export const putData = async <T>(url: string, data?: any, config?: AxiosRequestC
   }
 };
 
+export const patchData= async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+  try {
+    const token = localStorage.getItem('accessToken'); // 저장된 토큰을 가져온다
+    const configWithToken = {
+      ...config,
+      headers: {
+        ...config?.headers, // 기존의 헤더 보존
+        Authorization: `Bearer ${token}`, //Auth 헤더 추가
+      },
+    };
+    const response = await client.patchForm<T>(url, data, configWithToken);
+    return response.data;
+
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+
 //TODO: Delete 메서드
 export const deleteData = async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
   try {

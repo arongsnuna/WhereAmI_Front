@@ -1,5 +1,5 @@
 import userSample from '../assets/userSample.png';
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -8,6 +8,7 @@ import { UserContext } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
 import {User} from '../interface/user';
 import { useQuery } from 'react-query';
+import { MySchedule } from '../interface/scheduleResult';
 
 const MyPage=()=> {
     const navigate = useNavigate();
@@ -29,17 +30,18 @@ const MyPage=()=> {
         }
     }, [userData,isUserDataLoading]);
 
-    const [schedule, setSchedule] = useState({});
+    // 일정 받아오기
+    const [schedule, setSchedule] = useState<MySchedule>();
     const {data:scheduleData, isLoading:isScheduleDataLoading} = useQuery(['scehduler'],()=>
-        api.getData(`/scheduler`)
+        api.getData<MySchedule>(`/scheduler`)
     );
     useEffect(() => {
       if(!isScheduleDataLoading&&scheduleData){
         setSchedule(scheduleData);
       }
     }, [scheduleData, isScheduleDataLoading]);
-    console.log(schedule);
 
+    // 로그인, user 받아오기
     const handleLogin = () => {
       console.log(userState);
       if (userState.accessToken) {
@@ -54,17 +56,10 @@ const MyPage=()=> {
     const navigateHome= ()=>{
         navigate('/');
     }
-
-    // const updateUserInfo = async (e: any) => {
-    //     e.preventDefault();
-    //     try{
-    //         //업데이트해줘야함!!!
-    //     }
-    //     catch(err){
-    //         console.log(err);
-    //     }
-    // };
-    const deleteUserInfo = async(e:any) => {
+    const navigateUpdate = ()=>{
+        navigate('/UpdateMyPage');
+    }
+    const deleteUserInfo = async(e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         try{
             await api.deleteData(`/user/${userState.id}`)
@@ -78,6 +73,7 @@ const MyPage=()=> {
         }
 
     };
+
     const buttonText = userState.accessToken ? '로그아웃' : '로그인';
     const settings = {
         dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
@@ -152,12 +148,12 @@ const MyPage=()=> {
                   <div className="flex-1 ">
                       <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-3 mb-1 ml-3'>일정</h2>
                       <div className="border-gray-200 border p-4 rounded-lg">
-                        {bookmarkCounts && Object.keys(bookmarkCounts).length > 0 &&(
+                        {schedule && Object.keys(schedule).length > 0 &&(
                           <Slider {...settings}>
-                              {Object.entries(bookmarkCounts).map(([location,info])=>(
-                                <div key={location} className="flex justify-center p-2" onClick={navigateBookmarks}>
+                              {Object.entries(schedule).map(([s,info])=>(
+                                <div key={s} className="flex justify-center p-2" >
                                   <figure>
-                                  <img src={info.imagePath}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{location}({info.count})</figcaption>
+                                  <img src={info.imagePath}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>{info.title}</figcaption>
                                   </figure>
                                 </div>
                                 ))
@@ -169,30 +165,18 @@ const MyPage=()=> {
               </div>
           </div>
           <div className="flex justify-center mt-4">
-              {/* <form onSubmit={updateUserInfo}>
-                  <label>
-                      Name:
-                      <input type="text" value={userName} onChange={e => setUserName(e.target.value)} />
-                  </label>
-                  <label>
-                      Email:
-                      <input type="email" value={userEmail} onChange={e => setUserEmail(e.target.value)} />
-                  </label>
-                  <label>
-                      Password:
-                      <input type="password" value={userPassword} onChange={e => setUserPassword(e.target.value)} />
-                  </label>
-
-              </form> */}
               <button
                       className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
                       type="submit"
+                      style={{fontFamily:'GmarketSansMedium'}}
+                      onClick = {navigateUpdate}
                   >
                       Update User Info
                   </button>
               <button
                   className="bg-blue-500 hover:bg-blue-700 text-white py-4 px-4 rounded m-2"
                   onClick={deleteUserInfo}
+                  style={{fontFamily:'GmarketSansMedium'}}
               >
                   Delete User Info
               </button>

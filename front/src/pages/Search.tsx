@@ -7,7 +7,7 @@ import LandmarkResult from '../components/LandmarkResult';
 import "../global.css";
 import { UserContext } from '../context/Context';
 import { useNavigate } from 'react-router-dom';
-import {Landmark, LandmarkResultProps} from '../interface/landmark';
+import {LandmarkResultProps, LandmarkSearch} from '../interface/landmark';
 
 
 const Search = () => {
@@ -16,9 +16,10 @@ const Search = () => {
     const config = {
         headers: { 'Content-Type': 'multipart/form-data' },
     };
-    const [landmark, setLandmark] = useState<Landmark>()
-    const [nearByLandmarks, setNearByLandmarks] = useState<Landmark[]>([]);
+    const [landmark, setLandmark] = useState<LandmarkSearch>()
+    const [nearByLandmarks, setNearByLandmarks] = useState<LandmarkSearch[]>([]);
 
+    // 검색 버트 클릭했을 때
     const handleImageUpload = async (file: File) => {
         try {
             const formData = new FormData();
@@ -37,6 +38,8 @@ const Search = () => {
             await handleImageUpload(file);
         }
     }
+
+    // 로그인된 유저 확인
     const navigate = useNavigate();
     const { userState, dispatch } = useContext(UserContext);
     useEffect(() => {
@@ -44,14 +47,17 @@ const Search = () => {
     }, [userState]);
 
     const handleLogin = () => {
-        console.log(userState);
         if (userState.accessToken) {
             dispatch({ type: 'LOGOUT' });
         } else {
             navigate('/loginform');
         }
     };
-    console.log(userState.accessToken);
+    const navigateHome= ()=>{
+        setLandmark(undefined);
+        setNearByLandmarks([]);
+        navigate('/');
+    }
     const buttonText = userState.accessToken ? '로그아웃' : '로그인';
 
     return (
@@ -59,7 +65,7 @@ const Search = () => {
         {landmark &&
             <div className='flex'>
                 <div className='w-1/5'></div>
-                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>여긴 어디?</div>
+                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                             {buttonText}
