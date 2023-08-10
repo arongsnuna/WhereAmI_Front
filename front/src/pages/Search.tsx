@@ -61,7 +61,8 @@ const Search = () => {
                 <div className='w-1/5'></div>
                 <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                        <button style={{ fontFamily: 'GmarketSansMedium' }}
+                        className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                             {buttonText}
                         </button>
                 </div>
@@ -70,31 +71,31 @@ const Search = () => {
         {!landmark &&
             <div>
                 <div className='w-full flex justify-end pt-5 pr-5'>
-                        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
+                        <button style={{ fontFamily: 'GmarketSansMedium' }} className=" bg-cyan-200 hover:bg-cyan-400 text-gray-800 font-bold py-1 px-1 md:py-2 md:px-2 lg:py-3 lg:px-3 rounded-lg my-auto text-xs sm:text-base " onClick={handleLogin}>
                             {buttonText}
                         </button>
                 </div>
-                <a className='h-full w-full mb-4 flex items-center justify-center'><img src={wherelogo} className='h-full ' alt="Vite logo" /></a>
+                <a className='h-full w-full mb-4 flex items-center justify-center'><img src={wherelogo} className='h-40 w-30 ' alt="Vite logo" /></a>
             </div>
         }
         <div className='flex'>
 
         <div className='w-1/6'> </div>
-        <div className='m-4 w-4/6 flex flex-col justify-center items-center'>
-            <div className='flex flex-col items-center justify-center'>
+        <div className='m-3 w-4/6 flex flex-col justify-center items-center'>
+            <div style={{ fontFamily: 'GmarketSansMedium' }} className='flex flex-col items-center justify-center text-xs'>
                 <div>
                         <div className='w-full flex justify-center my-auto '>
-                            <div className='flex border border-gray-200 rounded-lg mr-2 '>
-                                <FontAwesomeIcon icon={faSearch} className="flex mx-auto ml-3 relative top-1/2 transform -translate-y-1/2 text-gray-400" />
+                            <div className='flex border-2 border-cyan-200 rounded-lg mr-2'>
+                                <FontAwesomeIcon icon={faSearch} className="flex mx-auto ml-3 relative top-1/2 transform -translate-y-1/2 text-cyan-200 lg:py-4 lg:px-4"/>
 
                                 <input
-                                    className="pl-5 py-2 pr-4 bg-transparent w-full outline-none text-center text-xs sm:text-base"
+                                    className="pl-2 py-3 pr-2 md:pt-2 bg-transparent w-full outline-none text-center text-xs sm:text-base lg:py-3 lg:px-3"
                                     type="file" accept='image/*'
                                     ref={fileInputRef}
                                 />
                             </div>
-                            <button
-                                className="flex bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-3 rounded-lg my-auto text-xs sm:text-base"
+                            <button style={{ fontFamily: 'GmarketSansMedium' }}
+                                className="flex bg-cyan-200 hover:bg-cyan-400 text-gray-800 font-bold rounded-lg my-auto text-xs sm:text-base py-1 px-1 md:py-2 md:px-2 lg:py-3 lg:px-3"
                                 onClick={handleButtonClick}
                                 >검색
                             </button>
