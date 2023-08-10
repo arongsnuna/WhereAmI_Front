@@ -18,11 +18,44 @@ import ContextProvider from './context/Context';
 
 function App() {
   const header = (
-    <header className="fixed bottom-0 flex justify-between">
-      <nav>
-        <a href="/Bookmarks">북마크</a>
-        <a href="/">여긴어디</a>
-        <a href="/Mypage">마이</a>
+     <header className="fixed bottom-0 flex justify-center bg-light-blue w-full p-2">
+      <nav className="flex justify-around items-center w-full space-x-2">
+        <a href="/">
+          <img
+            src="/public/images/magnifying2.png"
+            alt="검색 아이콘"
+            className="w-5 h-5 sm:w-8 sm:h-8 md:w-11 md:h-11"
+          />
+        </a>
+        <a href="/Mypage">
+          <img
+            src="/public/images/user2.png"
+            alt="마이 페이지 아이콘"
+            className="w-6 h-6 sm:w-9 sm:h-9 md:w-12 md:h-12"
+          />
+        </a>
+        <a href="/">
+          <img
+            src="/public/images/LogoIcon.png"
+            alt="여긴 어디 아이콘"
+            className="w-13 h-10 sm:w-24 sm:h-20 md:w-37 md:h-35"
+          />
+        </a>
+        <a href="/Bookmarks">
+          <img
+            src="/public/images/Like.png"
+            alt="북마크 아이콘"
+            className="w-6 h-6 sm:w-8 sm:h-8 md:w-11 md:h-11"
+          />
+        </a>
+
+        <a href="/SchedulerResult">
+          <img
+            src="/public/images/schedules2.png"
+            alt="일정 아이콘"
+            className="w-6 h-6 sm:w-9 sm:h-9 md:w-12 md:h-12"
+          />
+        </a>
       </nav>
     </header>
   );

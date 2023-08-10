@@ -29,14 +29,14 @@ function LoginForm() {
   return (
     <>
     {loginMutation.isError ? <p>로그인 정보를 찾을수가 없습니다</p> : null}
-      <div className='flex flex-col md:flex-row md:items-center md:justify-center'>
-        <a href="./" className="items-center">
-          <img src={wherelogo} className="logo sm:mx-auto" alt="Vite logo" />
+        <a href="./" className="items-center md-8">
+          <img src={wherelogo} className="logo w-23 h-32 mt-8 mb-12 mx-auto" alt="Vite logo" />
         </a>
-        <div className="text-center md:flex md:flex-col md:items-center md:justify-center">
+        <div className='flex flex-col md:flex-row md:items-center md:justify-center'>
+        <div style={{ fontFamily: 'GmarketSansMedium' }} className="text-center md:flex md:flex-col md:items-center md:justify-center ">
           <div className="flex flex-col">
             <input
-              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
+              className="mx-auto my-2 w-60 md:w-72 lg:w-96 h-12 sm:text-sm rounded-full bg-cyan-100 py-4 pl-4 focus:outline-none mb-3 "
               name='id'
               type='text'
               id='id'
@@ -44,7 +44,7 @@ function LoginForm() {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}/>
             <input
-              className="mx-auto my-1 w-auto md:w-60 text-center rounded-lg bg-slate-200"
+              className="mx-auto my-2 w-60 md:w-72 lg:w-96 h-12 sm:text-sm rounded-full bg-cyan-100 py-4 pl-4 focus:outline-none mb-3"
               name='password'
               type='password'
               id='password'
@@ -52,21 +52,15 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}/>
             <button
-              className="mx-auto mt-1 mb-3 w-40 text-center rounded-lg bg-slate-400"
+              className="mx-auto mt-2 mb-4 w-60 md:w-72 lg:w-96 h-12 text-center rounded-lg bg-white border-2 border-cyan-200 text-gray-800"
               onClick={handleSubmit}
               disabled={loginMutation.isLoading}>
               {loginMutation.isLoading ? 'Logging in...' : '로그인'}
             </button>
           </div>
-          <div className="flex flex-row justify-center md:mt-3">
-            <div> 아이디 찾기 </div>
-            <div className='mx-2'>  |  </div>
-            <div> 비밀번호 찾기 </div>
-            <div className='mx-2'>  |  </div>
-              <button onClick = {() => navigate('/registerform')}>회원가입</button>
+              <button className="mx-auto mt-2 mb-4 w-60 md:w-72 lg:w-96 h-12 text-center rounded-lg bg-white border-2 border-cyan-200 text-gray-800" onClick = {() => navigate('/registerform')}>회원가입</button>
           </div>
         </div>
-      </div>
     </>
   );
 }
