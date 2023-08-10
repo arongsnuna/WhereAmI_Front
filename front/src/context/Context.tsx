@@ -49,8 +49,6 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }): React.Re
         const id = localStorage.getItem('id');
         if (storedToken) {
             try {
-                const parsedUser = jwtDecode(storedToken);
-                console.log('Parsed user:', parsedUser);
                 dispatch({ type: 'LOGIN_SUCCESS', payload: {id: id || '', accessToken: storedToken}});
             } catch(e) {
                 console.error('Error parsing stored token:', e);

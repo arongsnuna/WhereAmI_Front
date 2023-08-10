@@ -57,11 +57,10 @@ const SchedulerResult=()=> {
             setOneScheduleItems(oneSchedule.schedule[0]);
         }
     }, [oneScheduleData,isOneScheduleDataLoading, oneSchedule]);
-    console.log('oneScheduleItems',oneScheduleItems)
     // 일정 삭제
     const deleteSchedule = async()=>{
         api.deleteData(`/scheduler/${userState.id}/${schedulerId}`);
-        alert('삭제되었습니다!');
+        alert('이 일정은 삭제되었습니다!');
         navigate('/AllSchedule');
     }
 
