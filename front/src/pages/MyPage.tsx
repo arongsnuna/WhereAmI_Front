@@ -40,7 +40,6 @@ const MyPage=()=> {
         setSchedule(scheduleData);
       }
     }, [scheduleData, isScheduleDataLoading]);
-    console.log(schedule);
 
     const handleSchedulerClick = (schedulerId: number)=>{
       navigate(`/SchedulerResult/${schedulerId}`);
@@ -48,7 +47,6 @@ const MyPage=()=> {
 
     // 로그인, user 받아오기
     const handleLogin = () => {
-      console.log(userState);
       if (userState.accessToken) {
           dispatch({ type: 'LOGOUT' });
       } else {
@@ -72,8 +70,8 @@ const MyPage=()=> {
         try{
             await api.deleteData(`/user/${userState.id}`)
             alert('삭제되었습니다.');
-            //로그아웃 처리
-            //홈화면으로 이동 - navigate 이용해서
+            dispatch({ type: 'LOGOUT' });
+            navigate('/')
         }
         catch(err){
             console.log(err);
@@ -182,14 +180,14 @@ const MyPage=()=> {
                         style={{fontFamily:'GmarketSansMedium'}}
                         onClick = {navigateUpdate}
                     >
-                        Update User Info
+                        회원정보 수정
                     </button>
                 <button
                     className="m-1 bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base"
                     onClick={deleteUserInfo}
                     style={{fontFamily:'GmarketSansMedium'}}
                 >
-                    Delete User Info
+                    회원 탈퇴
                 </button>
               </div>
               </>
