@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {postData} from '../api/index';
 import wherelogo from '../assets/where.png'
 import React, { useState, useContext, useEffect } from 'react';
@@ -60,7 +59,6 @@ const Search = () => {
         try {
             await postData('/bookmarks/toggle', { landmarkId });
             
-            // Update local state:
             if (likedLandmarks.includes(landmarkId)) {
                 setLikedLandmarks(prev => prev.filter(id => id !== landmarkId));
             } else {
@@ -70,15 +68,6 @@ const Search = () => {
             console.error("Error toggling bookmark:", error);
         }
     };
-
-    const toggleBookmark = (landmarkId: number) => {
-        if (userState.bookmarks.includes(landmarkId)) {
-            dispatch({ type: 'REMOVE_BOOKMARK', payload: { landmarkId } });
-        } else {
-            dispatch({ type: 'ADD_BOOKMARK', payload: { landmarkId } });
-        }
-    };
-
 
     return (
         <div>
@@ -90,6 +79,11 @@ const Search = () => {
                         <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
                             {buttonText}
                         </button>
+                        {landmark?.id && (
+                        <button onClick={() => landmark?.id && toggleBookmark(landmark.id)}>
+                            <FontAwesomeIcon icon={likedLandmarks.includes(landmark.id) ? solidHeart : regularHeart} />
+                        </button>
+                    )}
                 </div>
             </div>
         }
@@ -129,25 +123,18 @@ const Search = () => {
             </div>
         </div>
         </div >
-        {landmark && (
-            <div>
-                {/* ... existing code for displaying the landmark ... */}
-                <button onClick={() => toggleBookmark(landmark.id)}>
-                    <FontAwesomeIcon icon={likedLandmarks.includes(landmark.id) ? solidHeart : regularHeart} />
-                </button>
-            </div>
-        )}
-
+        {landmark && <LandmarkResult landmark={landmark} nearByLandmarks={nearByLandmarks}/>}
         {nearByLandmarks.map(nearLandmark => (
             <div key={nearLandmark.id}>
-                {/* ... existing code for displaying the nearby landmark ... */}
-                <button onClick={() => toggleBookmark(nearLandmark.id)}>
-                    <FontAwesomeIcon icon={likedLandmarks.includes(nearLandmark.id) ? solidHeart : regularHeart} />
+                <LandmarkResult landmark={nearLandmark} nearByLandmarks={[]} />
+                <button onClick={() => nearLandmark.id && toggleBookmark(nearLandmark.id)}>
+                    <FontAwesomeIcon icon={nearLandmark.id && likedLandmarks.includes(nearLandmark.id) ? solidHeart : regularHeart} />
                 </button>
             </div>
         ))}
-    </div>
+        </div>
     )
-};
+}
+
 
 export default Search;
