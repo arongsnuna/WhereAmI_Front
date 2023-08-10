@@ -7,6 +7,9 @@ import { TripSchedule, ScheduleItem } from '../interface/scheduleResult';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash} from '@fortawesome/free-solid-svg-icons';
+
 
 interface ImageModalProps {
     isOpen: boolean;
@@ -55,6 +58,12 @@ const SchedulerResult=()=> {
         }
     }, [oneScheduleData,isOneScheduleDataLoading, oneSchedule]);
     console.log('oneScheduleItems',oneScheduleItems)
+    // 일정 삭제
+    const deleteSchedule = async()=>{
+        api.deleteData(`/scheduler/${userState.id}/${schedulerId}`);
+        alert('삭제되었습니다!');
+        navigate('/AllSchedule');
+    }
 
     // 클릭했을때 모달창 뜨도록
     const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
@@ -124,7 +133,7 @@ const SchedulerResult=()=> {
                             <h1 className='w-full m-3 p-2 items-center text-center text-bold border border-gray-200 rounded' style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>
                                 {oneSchedule.title}
                             </h1>
-                            <div className='w-2/5'></div>
+                            <div className='w-2/5 flex justify-center items-center'><FontAwesomeIcon icon={faTrash}  onClick={deleteSchedule}/></div>
                         </div>
                         <Slider {...settings}>
                             {oneScheduleItems && Object.keys(oneScheduleItems).map(date => (
