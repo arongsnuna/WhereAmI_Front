@@ -6,8 +6,56 @@ import 'slick-carousel/slick/slick-theme.css';
 import { UserContext } from '../context/Context';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { BookmarkZip } from '../interface/bookmark';
+import { BookmarkZip, Bookmark } from '../interface/bookmark';
 import { Button} from 'antd';
+interface ImageModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    siDo: string;
+    imagePath: string;
+    name: string;
+    address: string;
+    landmarkId:number;
+}
+
+const ImageModal: React.FC<ImageModalProps> = ({ isOpen, onClose, siDo, imagePath, name, address, landmarkId}) => {
+    // 북마크 삭제
+    const navigate = useNavigate();
+    const deleteBookmark = async(landmarkId: number)=>{
+        await api.deleteData<Bookmark>(`/bookmarks/${landmarkId}`);
+        alert('삭제되었습니다!');
+        navigate('/Bookmarks');
+    }
+    return (
+        <div className={`fixed inset-0 z-50 flex items-center justify-center ${isOpen ? '' : 'hidden'}`}>
+            <div className="bg-white p-8 m-5 rounded-lg shadow-lg border border-gray-100">
+                {name &&address?(
+                    <div>
+                        <div className='flex justify-center'>
+                            <img src={imagePath} alt={name} className="w-1/2 h-auto mb-4 rounded items-center" />
+                        </div>
+                        <h2 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='flex justify-center items-center'>{name}</h2>
+                        <br/>
+                        {siDo && <p style={{ fontFamily: 'GmarketSansMedium' }}>지역:  {siDo}</p>}
+                        <br/>
+                        {address && <p style={{ fontFamily: 'GmarketSansMedium' }}>주소: {address}</p>}
+                        <br/>
+                        <div className="flex justify-center">
+                            <button onClick={onClose}style={{ fontFamily: 'GmarketSansMedium' }}
+                                className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base m-1">
+                                    닫기
+                            </button>
+                            <button onClick={()=>deleteBookmark(landmarkId)}style={{ fontFamily: 'GmarketSansMedium' }}
+                                className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base m-1">
+                                    삭제하기
+                            </button>
+                        </div>
+                    </div>
+                ):(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)}
+            </div>
+        </div>
+    );
+};
 
 const Bookmarks=()=>{
     const { userState, dispatch} = useContext(UserContext);
@@ -36,6 +84,23 @@ const Bookmarks=()=>{
     const navigateMakeSchedule= () => {
        navigate("/MakeSchedule");
     }
+    // 클릭했을때 모달창 뜨도록
+    const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
+    const [selectedImage, setSelectedImage] = useState<string>('');
+    const [selectedImageInfo, setSelectedImageInfo] = useState<Bookmark | null>(null);
+
+    const openImageModal = async(imagePath: string, landmarkId: number) => {
+        await setIsImageModalOpen(true);
+        await setSelectedImage(imagePath);
+        const response = await api.getData<Bookmark>(`/bookmarks/${landmarkId}`);
+        await setSelectedImageInfo(response);
+    };
+
+    const closeImageModal = () => {
+        setIsImageModalOpen(false);
+        setSelectedImage('');
+        setSelectedImageInfo(null);
+    };
 
     const settings = {
         dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
@@ -76,7 +141,7 @@ const Bookmarks=()=>{
                                     <Slider {...settings}>
                                         {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                             <figure className="flex justify-center p-3" key={imgIndex}>
-                                                <img src={bookmark.imagePath}/>
+                                                <img src={bookmark.imagePath} onClick={() => openImageModal(bookmark.imagePath, bookmark.landmarkId)}/>
                                                 <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
                                                     {bookmark.name}
                                                 </figcaption>
@@ -84,9 +149,18 @@ const Bookmarks=()=>{
                                         ))}
                                     </Slider>
                                 </div>
+                                <ImageModal
+                                    isOpen={isImageModalOpen}
+                                    onClose={closeImageModal}
+                                    imagePath={selectedImage}
+                                    name={selectedImageInfo?.name || ''}
+                                    siDo={selectedImageInfo?.siDo|| ''}
+                                    address={selectedImageInfo?.address || ''}
+                                    landmarkId={selectedImageInfo?.landmarkId||0}
+                                />
                             </div>
                         ))
-                    ):((<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>))
+                    ):(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)
                     }
                     {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                         <div className='flex justify-center items-center'>
