@@ -874,7 +874,7 @@ ansi-styles@^4.1.0:
 
 antd@^5.8.2:
   version "5.8.2"
-  resolved "https://registry.npmjs.org/antd/-/antd-5.8.2.tgz#1ebaa11f601f13598badc8ba9511e002b33661b5"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-5.8.2.tgz#1ebaa11f601f13598badc8ba9511e002b33661b5"
   integrity sha512-kkC2BSBde1JzJxk2wNYj/NXgNZQZ2yu6avJoCKleSi32nsjiadi7FFu1AyGxIzoJ9CrxoLacjGvrwbKJQ6kCvw==
   dependencies:
     "@ant-design/colors" "^7.0.0"
