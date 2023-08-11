@@ -1,80 +1,102 @@
-import MapContainer from '../components/MapContainer';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import * as api from '../api/index';
-import React, { useContext,  useState, useEffect } from 'react';
-import { UserContext } from '../context/Context';
-import { useQuery} from 'react-query';
-import {Landmark, LandmarkResultProps} from '../interface/landmark';
-import { Bookmark } from '../interface/bookmark';
+import MapContainer from "../components/MapContainer";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import * as api from "../api/index";
+import React, { useContext, useState, useEffect } from "react";
+import { UserContext } from "../context/Context";
+import { useQuery } from "react-query";
+import { Landmark, LandmarkResultProps } from "../interface/landmark";
+import { Bookmark } from "../interface/bookmark";
 
+const LandmarkResult: React.FC<LandmarkResultProps> = ({
+  landmark,
+  nearByLandmarks,
+}) => {
+  const { userState } = useContext(UserContext);
 
-const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmarks }) => {
-  // 로그인된 user 확인
-  const { userState} = useContext(UserContext);
-
-  //user의 전체 북마크 모음
-  const [bookmarkZip, setBookmarkZip] = useState<Bookmark>();
-  const { data: bookmarkZipData, isLoading: isBookmarkZipLoading } = useQuery(['bookmarkZip', userState.id], () =>
+  // user의 전체 북마크 모음
+  const { data: bookmarkZip } = useQuery(["bookmarkZip", userState.id], () =>
     api.getData<Bookmark>(`/bookmarks`)
   );
-  useEffect(() => {
-    async function fetchData() {
-      if (!isBookmarkZipLoading&& bookmarkZipData) {
-        setBookmarkZip(bookmarkZipData);
-      }
-    }
-    fetchData();
-  }, [isBookmarkZipLoading, bookmarkZipData, landmark]);
 
-  // bookmarkZip에 lanmark가 있는지 확인 -> landmarkIn
   const [landmarkIn, setLandmarkIn] = useState(false);
-  // bookmarkZip에 각각의 nearByLandmarks가 있는지 확인하는 boolean 배열 -> nearByLandmarksIn
   const [nearByLandmarksIn, setNearByLandmarksIn] = useState<Boolean[]>([]);
 
-  useEffect(()=>{
-    // nearByLandmarks가 bookmarkZip 에 있는지
-    nearByLandmarks.forEach(landmark => {
-      isInBookmarkZip(landmark.id);
-    })
-    // landmark가 bookmarkZip 에 있는지
-    if(bookmarkZip != null && Object.values(bookmarkZip).length >0){
-      setLandmarkIn(!!Object.values(bookmarkZip).find((item: Landmark)=>item.landmarkId=== landmark.id));
+  // bookmarkZip에 변경이 있을 때마다 landmark와 nearByLandmarks의 상태를 확인합니다.
+  useEffect(() => {
+    let isLandmarkIn = false;
+    if (bookmarkZip) {
+      isLandmarkIn = !!Object.values(bookmarkZip).find(
+        (item: Landmark) => item.landmarkId === landmark.id
+      );
     }
-    console.log("뿡스바뤼",landmarkIn,nearByLandmarksIn)
-  },[landmark]);
-  // 주어진 landmarkId가 bookmarkZip에 있는지 확인
-  const isInBookmarkZip = async(landmarkId: number)=>{
-    try{
-      if(bookmarkZip != null && Object.values(bookmarkZip).length >0){
-        if(nearByLandmarksIn.length>5){
-          setNearByLandmarksIn([])
-        }
-        const hasId =!!Object.values(bookmarkZip).find((item: Landmark)=>item.landmarkId=== landmarkId);
-        setNearByLandmarksIn(prevItems=>[...prevItems, hasId])
+
+    const nearbyStatus = nearByLandmarks.map((landmark) => {
+      if (bookmarkZip) {
+        return !!Object.values(bookmarkZip).find(
+          (item: Landmark) => item.landmarkId === landmark.id
+        );
       }
-    }
-    catch(err){
-      console.log(err);
-      alert(err);
-    }
-  }
+      return false;
+    });
 
-  const handleBookmark = async(e: React.MouseEvent<HTMLButtonElement, MouseEvent>,landmarkId: number)=>{
+    setLandmarkIn(isLandmarkIn);
+    setNearByLandmarksIn(nearbyStatus);
+  }, [bookmarkZip, nearByLandmarks, landmark]);
+
+  const handleBookmark = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    landmarkId: number,
+    index?: number
+  ) => {
     e.preventDefault();
-    try{
-      await api.postWithAuth('/bookmarks/toggle',{landmarkId:landmarkId});
-    }
-    catch (err) {
-      console.log(err)
-      alert(err);
-    }
-  }
 
-  const afterLogin=async () => {
-    alert('로그인 후 이용해주세요.');
-  }
+    // UI를 먼저 업데이트 (옵티미스틱 업데이트)
+    if (typeof index !== "undefined") {
+      setNearByLandmarksIn((prev) => {
+        const updated = [...prev];
+        updated[index] = !updated[index];
+        return updated;
+      });
+    } else {
+      setLandmarkIn((prev) => !prev);
+    }
+
+    try {
+      await api.postWithAuth("/bookmarks/toggle", { landmarkId: landmarkId });
+    } catch (err) {
+      // 실패 시 원래 상태로 되돌림
+      if (typeof index !== "undefined") {
+        setNearByLandmarksIn((prev) => {
+          const updated = [...prev];
+          updated[index] = !updated[index];
+          return updated;
+        });
+      } else {
+        setLandmarkIn((prev) => !prev);
+      }
+      console.log(err);
+      alert("북마크 업데이트에 실패하였습니다.");
+    }
+  };
+
+  // const handleBookmark = async (
+  //   e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  //   landmarkId: number
+  // ) => {
+  //   e.preventDefault();
+  //   try {
+  //     await api.postWithAuth("/bookmarks/toggle", { landmarkId: landmarkId });
+  //   } catch (err) {
+  //     console.log(err);
+  //     alert(err);
+  //   }
+  // };
+
+  const afterLogin = () => {
+    alert("로그인 후 이용해주세요.");
+  };
 
   const settings = {
     dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
@@ -83,37 +105,55 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
     slidesToShow: 2, // 화면에 보여질 슬라이드 수
     slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
     arrow: null, // 이전 화살표를 숨김
-    draggable : true, //드래그 가능 여부
-    responsive: [ // 반응형 웹 구현 옵션
+    draggable: true, //드래그 가능 여부
+    responsive: [
+      // 반응형 웹 구현 옵션
       {
         breakpoint: 768, //화면 사이즈 768px
         settings: {
-          slidesToShow:1
-        }
-      }
-    ]
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row" style={{fontFamily:'GmarketSansMedium'}}>
+      <div
+        className="flex flex-col md:flex-row"
+        style={{ fontFamily: "GmarketSansMedium" }}
+      >
         <div className="w-full border border-gray-200 rounded m-2 items-center justify-center ">
-          <div className='m-4'>
-            <img  src={landmark.imagePath} alt={landmark.name} />
+          <div className="m-4">
+            <img src={landmark.imagePath} alt={landmark.name} />
           </div>
           <div className="flex justify-between items-center">
             <div>
               <p className="ml-4 text-left sm:text-xl">{landmark.name}</p>
-              <p className="ml-4 text-left mb-2 text-xs sm:text-l">{landmark.address}</p>
+              <p className="ml-4 text-left mb-2 text-xs sm:text-l">
+                {landmark.address}
+              </p>
             </div>
-            {!userState.accessToken?(
-              <button className="mr-4" onClick={()=>afterLogin()}>♡</button>
-            ):(
+            {!userState.accessToken ? (
+              <button className="mr-4" onClick={() => afterLogin()}>
+                ♡
+              </button>
+            ) : (
               <>
-                {landmarkIn?(
-                  <button className="mr-4" onClick={(e) => handleBookmark(e,landmark.id)}>♥</button>
-                ):(
-                  <button className="mr-4" onClick={(e) => handleBookmark(e,landmark.id)}>♡</button>
+                {landmarkIn ? (
+                  <button
+                    className="mr-4"
+                    onClick={(e) => handleBookmark(e, landmark.id)}
+                  >
+                    ♥
+                  </button>
+                ) : (
+                  <button
+                    className="mr-4"
+                    onClick={(e) => handleBookmark(e, landmark.id)}
+                  >
+                    ♡
+                  </button>
                 )}
               </>
             )}
@@ -123,27 +163,56 @@ const LandmarkResult: React.FC<LandmarkResultProps> = ({ landmark, nearByLandmar
           <MapContainer name={landmark.name} address={landmark.address} />
         </div>
       </div>
-      <p className='text-3xl ml-5 mt-3' style={{fontFamily: 'GangwonEduPowerExtraBoldA'}}>주변에는?</p>
+      <p
+        className="text-3xl ml-5 mt-3"
+        style={{ fontFamily: "GangwonEduPowerExtraBoldA" }}
+      >
+        주변에는?
+      </p>
       <Slider {...settings}>
-        {nearByLandmarks.map((land,index) => (
+        {nearByLandmarks.map((land, index) => (
           <div>
             <div className="w-9/10 border border-gray-200 rounded m-2 justify-center">
-              <div className='m-4'>
-                <img  src={land.imagePath} alt={land.name} />
+              <div className="m-4">
+                <img src={land.imagePath} alt={land.name} />
               </div>
               <div className="flex justify-between items-center">
                 <div>
-                  <p style={{fontFamily:'GmarketSansMedium'}} className="ml-4 text-left text-l sm:text-xl">{land.name}</p>
-                  <p style={{fontFamily:'GmarketSansMedium'}} className="ml-4 text-left text-xs sm:text-l mb-2">{land.address}</p>
+                  <p
+                    style={{ fontFamily: "GmarketSansMedium" }}
+                    className="ml-4 text-left text-l sm:text-xl"
+                  >
+                    {land.name}
+                  </p>
+                  <p
+                    style={{ fontFamily: "GmarketSansMedium" }}
+                    className="ml-4 text-left text-xs sm:text-l mb-2"
+                  >
+                    {land.address}
+                  </p>
                 </div>
-                {!userState.accessToken?(
-                  <button className="mr-4" onClick={()=>afterLogin()}>♡</button>
-                ):(
+                {!userState.accessToken ? (
+                  <button className="mr-4" onClick={() => afterLogin()}>
+                    ♡
+                  </button>
+                ) : (
                   <>
-                    {nearByLandmarksIn[index]?(
-                      <button className="mr-4" onClick={(e) => handleBookmark(e, land.id)}> ♥ </button>
-                    ):(
-                      <button className="mr-4" onClick={(e) => handleBookmark(e, land.id)}> ♡ </button>
+                    {nearByLandmarksIn[index] ? (
+                      <button
+                        className="mr-4"
+                        onClick={(e) => handleBookmark(e, land.id, index)}
+                      >
+                        {" "}
+                        ♥{" "}
+                      </button>
+                    ) : (
+                      <button
+                        className="mr-4"
+                        onClick={(e) => handleBookmark(e, land.id, index)}
+                      >
+                        {" "}
+                        ♡{" "}
+                      </button>
                     )}
                   </>
                 )}
