@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  overflow-x: hidden;
+}
+
 @layer base {
     h1 {
       @apply text-2xl;

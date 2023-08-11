@@ -45,11 +45,21 @@ const MakeSchedule=()=>{
 
     // img 클릭
     const [selectedImgPath, setSelectedImgPath] = useState<string[]>([]); // 추가된 부분
+    const [selectedImgIndices, setSelectedImgIndices] = useState<number[]>([]);
+
 
     const handleImgClick = (index: number, name: string) => {
-        setSelectedImgPath(prevPaths =>[...prevPaths, name])
-        console.log(index);
+        if (selectedImgIndices.includes(index)) {
+            // 이미 클릭 되었을 경우, 리스트에 제외
+            setSelectedImgIndices(prevIndices => prevIndices.filter(i => i !== index));
+            setSelectedImgPath(prevPaths => prevPaths.filter(path => path !== name));
+        } else {
+            // If not selected, add to the list
+            setSelectedImgIndices(prevIndices => [...prevIndices, index]);
+            setSelectedImgPath(prevPaths => [...prevPaths, name]);
+        }
     };
+    
     const selectedImgPathString = selectedImgPath.join(', ');
 
     // 캘린더 모달창
@@ -221,16 +231,19 @@ const MakeSchedule=()=>{
                             <div className="h-[480px] overflow-hidden">
                                 <Slider {...settings}>
                                     {item.bookmarks.map((bookmark: any, imgIndex: number) => (
-                                        <figure className="flex justify-center p-2" key={imgIndex}>
-                                            <img
-                                                className="w-full h-96 object-cover"
-                                                onClick={() => handleImgClick(imgIndex, bookmark.name)}
-                                                src={bookmark.imagePath}
-                                            />
-                                            <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
-                                                {bookmark.name}
-                                            </figcaption>
-                                        </figure>
+                                        <figure 
+                                            className={`flex justify-center p-2 ${selectedImgIndices.includes(imgIndex) ? 'border-2 border-light-blue-200' : ''}`} 
+                                            key={imgIndex}
+                                        >
+                                        <img
+                                            className="w-full h-96 object-cover"
+                                            onClick={() => handleImgClick(imgIndex, bookmark.name)}
+                                            src={bookmark.imagePath}
+                                        />
+                                        <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
+                                            {bookmark.name}
+                                        </figcaption>
+                                    </figure>
                                     ))}
                                 </Slider>
                             </div>
