@@ -45,7 +45,7 @@ const MakeSchedule=()=>{
 
     // img 클릭
     const [selectedImgPath, setSelectedImgPath] = useState<string[]>([]); // 추가된 부분
-    const [selectedImgIndices, setSelectedImgIndices] = useState<number[]>([]);
+    const [selectedImgIndices] = useState<number[]>([]);
 
 
     const handleImgClick = (district: string, name: string) => {
