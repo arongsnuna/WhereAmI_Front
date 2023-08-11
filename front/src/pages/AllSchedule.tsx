@@ -25,7 +25,7 @@ const AllSchedule=()=>{
     }, [scheduleData, isScheduleDataLoading]);
 
     const handleSchedulerClick = (schedulerId: number)=>{
-      navigate(`/SchedulerResult/${schedulerId}`);
+        navigate(`/SchedulerResult/${schedulerId}`);
     }
 
     // 로그인, user 받아오기

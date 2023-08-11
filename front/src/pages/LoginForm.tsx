@@ -28,7 +28,7 @@ function LoginForm() {
 
   return (
     <>
-    {loginMutation.isError ? <p>로그인 정보를 찾을수가 없습니다</p> : null}
+    {loginMutation.isError ? alert('로그인 정보를 찾을수가 없습니다'): null}
         <a href="./" className="items-center md-8">
           <img src={wherelogo} className="logo w-23 h-32 mt-8 mb-12 mx-auto" alt="Vite logo" />
         </a>

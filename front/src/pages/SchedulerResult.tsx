@@ -49,21 +49,24 @@ const SchedulerResult=()=> {
     const {data:oneScheduleData, isLoading:isOneScheduleDataLoading} = useQuery(['scehduler'],()=>
         api.getData<TripSchedule>(`/scheduler/${schedulerId}`)
     );
-    useEffect(()=>{
-        if(!isOneScheduleDataLoading&&oneScheduleData){
-            setOneSchedule(oneScheduleData);
-        }
-        if(oneSchedule){
-            setOneScheduleItems(oneSchedule.schedule[0]);
-        }
-    }, [oneScheduleData,isOneScheduleDataLoading, oneSchedule]);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!isOneScheduleDataLoading && oneScheduleData) {
+                setOneSchedule(oneScheduleData);
+                if (oneSchedule) {
+                    setOneScheduleItems(oneSchedule.schedule[0]);
+                }
+            }
+        };
+        fetchData();
+    }, [oneScheduleData, isOneScheduleDataLoading, oneSchedule]);
+
     // 일정 삭제
     const deleteSchedule = async()=>{
         api.deleteData(`/scheduler/${userState.id}/${schedulerId}`);
         alert('이 일정은 삭제되었습니다!');
         navigate('/AllSchedule');
     }
-
     // 클릭했을때 모달창 뜨도록
     const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string>('');
@@ -96,13 +99,13 @@ const SchedulerResult=()=> {
     }
     const settings = {
         dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
-        infinite: false, // 무한 반복 (true: 무한 반복, false: 끝에 도달하면 정지)
+        infinite: true, // 무한 반복 (true: 무한 반복, false: 끝에 도달하면 정지)
         speed: 500, // 슬라이드 전환 속도 (밀리초 단위)
         slidesToShow: 3, // 화면에 보여질 슬라이드 수
         slidesToScroll: 1, // 한 번에 스크롤할 슬라이드 수
         arrow: null, // 이전 화살표를 숨김
         draggable : true, //드래그 가능 여부
-        initialSlide: 1, // 첫 번째 슬라이드를 보이게 설정
+        initialSlide:1,
         responsive: [ // 반응형 웹 구현 옵션
 					{
 						breakpoint: 640, //화면 사이즈 768px
@@ -125,7 +128,7 @@ const SchedulerResult=()=> {
                 </div>
             </div>
             <div>
-                {oneSchedule && (
+                {oneScheduleData && oneSchedule ?(
                     <div>
                         <div className='w-full flex'>
                             <div className='w-2/5'></div>
@@ -144,6 +147,9 @@ const SchedulerResult=()=> {
                                                 <figure key={index}>
                                                     {item.transportation==""?(<p></p>):(
                                                         <p className='p-1 text-center justify-center m-5'  style={{ fontFamily: 'GmarketSansMedium' }}>-- 이동 방법 --<br/>{item.transportation}</p>
+                                                    )}
+                                                    {item.distance==0?(<p></p>):(
+                                                        <p className='p-1 text-center justify-center m-5'  style={{ fontFamily: 'GmarketSansMedium' }}>-- 이동 거리 --<br/>{item.distance}km</p>
                                                     )}
                                                     {item.duration==0?(<p></p>):(
                                                         <p className='p-1 text-center justify-center m-5'  style={{ fontFamily: 'GmarketSansMedium' }}>-- 걸리는 시간 --<br/>{item.duration}분</p>
@@ -170,7 +176,7 @@ const SchedulerResult=()=> {
                             recommendPlace={selectedImageInfo?.recommendPlace || ''}
                         />
                     </div>
-                )}
+                ):(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)}
             </div>
 
 
