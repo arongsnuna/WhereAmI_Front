@@ -12,13 +12,21 @@ import ContextProvider from "./context/Context";
 import AllSchedule from "./pages/AllSchedule";
 import BookmarksDetail from "./pages/BookmarksDetail";
 
+import Heart from './assets/Heart.png';
+import Like from './assets/Like.png';
+import magnifying from './assets/magnifying2.png';
+import schedule from './assets/schedules2.png';
+import user from './assets/user2.png';
+import LogoIcon from './assets/LogoIcon.png';
+
+
 function App() {
   const header = (
     <header className="fixed bottom-0 flex justify-center bg-light-blue w-full p-2">
       <nav className="flex justify-around items-center w-full space-x-2">
         <a href="/" className="tooltip">
           <img
-            src="/public/images/magnifying2.png"
+            src={magnifying}
             alt="검색 아이콘"
             className="w-5 h-5 sm:w-8 sm:h-8 md:w-11 md:h-11"
           />
@@ -26,7 +34,7 @@ function App() {
         </a>
         <a href="/Mypage" className="tooltip">
           <img
-            src="/public/images/user2.png"
+            src={user}
             alt="마이 페이지 아이콘"
             className="w-6 h-6 sm:w-9 sm:h-9 md:w-12 md:h-12"
           />
@@ -34,14 +42,14 @@ function App() {
         </a>
         <a href="/?reset=true">
           <img
-            src="/public/images/LogoIcon.png"
+            src={LogoIcon}
             alt="여긴 어디 아이콘"
             className="w-13 h-10 sm:w-24 sm:h-20 md:w-37 md:h-35"
           />
         </a>
         <a href="/Bookmarks" className="tooltip">
           <img
-            src="/public/images/Like.png"
+            src={Like}
             alt="북마크 아이콘"
             className="w-6 h-6 sm:w-8 sm:h-8 md:w-11 md:h-11"
           />
@@ -50,7 +58,7 @@ function App() {
 
         <a href="/AllSchedule" className="tooltip">
           <img
-            src="/public/images/schedules2.png"
+            src={schedule}
             alt="일정 아이콘"
             className="w-6 h-6 sm:w-9 sm:h-9 md:w-12 md:h-12"
           />
