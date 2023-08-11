@@ -10,6 +10,7 @@ import UpdateMyPage from "./pages/UpdateMyPage";
 import MakeSchedule from "./pages/MakeSchedule";
 import ContextProvider from "./context/Context";
 import AllSchedule from "./pages/AllSchedule";
+import BookmarksDetail from "./pages/BookmarksDetail";
 
 function App() {
   const header = (
@@ -75,6 +76,10 @@ function App() {
             <Route path="/UpdateMyPage" element={<UpdateMyPage />} />
             <Route path="/MakeSchedule" element={<MakeSchedule />} />
             <Route path="/AllSchedule" element={<AllSchedule />} />
+            <Route
+              path="/BookmarksDetail/:landmarkName"
+              element={<BookmarksDetail />}
+            />
           </Routes>
         </Router>
         <div style={{ position: "relative" }}>{header}</div>
