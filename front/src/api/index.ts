@@ -45,23 +45,43 @@ export const putData = async <T>(url: string, data?: any, config?: AxiosRequestC
   }
 };
 
-export const patchData= async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
+export const patchData = async <T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> => {
   try {
-    const token = localStorage.getItem('accessToken'); // 저장된 토큰을 가져온다
-    const configWithToken = {
-      ...config,
-      headers: {
-        ...config?.headers, // 기존의 헤더 보존
-        Authorization: `Bearer ${token}`, //Auth 헤더 추가
-      },
-    };
-    const response = await client.patchForm<T>(url, data, configWithToken);
-    return response.data;
+      // Before making the request:
+      console.log('URL:', url);
+      console.log('Data:', data);
+
+      const token = localStorage.getItem('accessToken'); // 저장된 토큰을 가져온다
+      const configWithToken = {
+          ...config,
+          headers: {
+              ...config?.headers, // 기존의 헤더 보존
+              Authorization: `Bearer ${token}`, //Auth 헤더 추가
+          },
+      };
+
+      console.log('Config with Token:', configWithToken); // Logging the config after constructing it
+
+      const response = await client.patch<T>(url, data, configWithToken);
+
+      // After getting the response (before the return):
+      console.log('Response:', response);
+
+      return response.data;
 
   } catch (error: any) {
-    throw new Error(error.message);
+      // Inside the catch block to ensure you capture all details of the error:
+      console.error('Error details:', error);
+      if (error.response) {
+          console.error('Error response data:', error.response.data);
+          console.error('Error response status:', error.response.status);
+          console.error('Error response headers:', error.response.headers);
+      }
+
+      throw new Error(error.message);
   }
 }
+
 
 
 //TODO: Delete 메서드

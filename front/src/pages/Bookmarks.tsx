@@ -65,9 +65,9 @@ const Bookmarks=()=>{
         api.getData<BookmarkZip[]>(`/bookmarks/user`)
     );
     useEffect(() => {
-      if(!isLoading&&data) {
-        setBookmarkZip(data);
-      }
+        if(!isLoading&&data) {
+            setBookmarkZip(data);
+        }
     }, [data, isLoading]);
     const buttonText = userState.accessToken ? '로그아웃' : '로그인';
     const navigate = useNavigate();
@@ -83,7 +83,7 @@ const Bookmarks=()=>{
     }
 
     const navigateMakeSchedule= () => {
-       navigate("/MakeSchedule");
+        navigate("/MakeSchedule");
     }
     // 클릭했을때 모달창 뜨도록
     const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
@@ -102,6 +102,7 @@ const Bookmarks=()=>{
         setSelectedImage('');
         setSelectedImageInfo(null);
     };
+    
 
     const settings = {
         dots: true, // 아래에 점 표시 (true: 표시, false: 숨김)
@@ -112,19 +113,41 @@ const Bookmarks=()=>{
         arrow: null, // 이전 화살표를 숨김
         draggable : true, //드래그 가능 여부
         responsive: [ // 반응형 웹 구현 옵션
-					{
-						breakpoint: 768, //화면 사이즈 768px
-						settings: {
-							slidesToShow:2
-						}
-					}
-				]
+		{
+            breakpoint: 1620,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 4
+            }
+        },
+        {
+            breakpoint: 1200,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3
+            }
+        },
+        {
+            breakpoint: 900,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2
+            }
+        },
+        {
+            breakpoint: 767,
+            settings: {
+                slidesToShow: 1,  
+                slidesToScroll: 1
+            }
+        }
+    ]
     };
-    return(
+    return (
         <div>
             <div className='flex'>
                 <div className='w-1/5'></div>
-                <div className='w-3/5 text-center pt-5 text-5xl'style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} onClick={navigateHome}>여긴 어디?</div>
+                <div className='w-3/5 text-center pt-5 text-5xl' style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} onClick={navigateHome}>여긴 어디?</div>
                 <div className='w-1/5 flex justify-end pt-5 pr-5'>
                     <button style={{ fontFamily: 'GmarketSansMedium' }}
                         className="bg-cyan-300 hover:bg-cyan-400 text-gray-800 font-bold py-2 px-3 rounded my-auto text-xs sm:text-base" onClick={handleLogin}>
@@ -132,18 +155,25 @@ const Bookmarks=()=>{
                     </button>
                 </div>
             </div>
-            {!userState.accessToken?(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로그인 후 이용해주세요!</h1>):(
+
+            {!userState.accessToken ? (
+                <h1 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='mt-8 mb-1 ml-3 text-center'>로그인 후 이용해주세요!</h1>
+            ) : (
                 <>
-                    {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
-                        bookmarkZip.map((item:any)=>(
-                            <div className="w-9/10 border border-gray-200 rounded m-2 justify-center text-bold" key={item.siDo}>
+                    {bookmarkZip && Object.keys(bookmarkZip).length > 0 ? (
+                        bookmarkZip.map((item: any) => (
+                            <div className="w-9/10 border border-light-blue-200 rounded m-10 justify-center text-bold" key={item.siDo}>
                                 <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
-                                <div>
+                                <div className="h-[480px] overflow-hidden">
                                     <Slider {...settings}>
                                         {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                             <figure className="flex justify-center p-3" key={imgIndex}>
-                                                <img src={bookmark.imagePath} onClick={() => openImageModal(bookmark.imagePath, bookmark.landmarkId)}/>
-                                                <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
+                                                <img 
+                                                    src={bookmark.imagePath} 
+                                                    className="w-full h-96 object-cover" 
+                                                    onClick={() => openImageModal(bookmark.imagePath, bookmark.landmarkId)} 
+                                                />
+                                                <figcaption className="truncate w-full text-center m-1">
                                                     {bookmark.name}
                                                 </figcaption>
                                             </figure>
@@ -155,26 +185,30 @@ const Bookmarks=()=>{
                                     onClose={closeImageModal}
                                     imagePath={selectedImage}
                                     name={selectedImageInfo?.name || ''}
-                                    siDo={selectedImageInfo?.siDo|| ''}
+                                    siDo={selectedImageInfo?.siDo || ''}
                                     address={selectedImageInfo?.address || ''}
-                                    landmarkId={selectedImageInfo?.landmarkId||0}
+                                    landmarkId={selectedImageInfo?.landmarkId || 0}
                                 />
                             </div>
                         ))
-                    ):(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)
-                    }
-                    {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
+                    ) : (
+                        <h1 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>
+                    )}
+                    {bookmarkZip && Object.keys(bookmarkZip).length > 0 && (
                         <div className='flex justify-center items-center'>
-                            <Button onClick={navigateMakeSchedule} className="mt-5">
+                            <Button 
+                                onClick={navigateMakeSchedule} 
+                                className="mt-5 border border-blue-200 text-2x1 px-8 text-bold" 
+                                size="large"
+                            >
                                 일정 만들러가기
                             </Button>
                         </div>
-                    ):(<p></p>)}
+                    )}
                 </>
             )}
-
         </div>
     )
+};
 
-}
 export default Bookmarks;

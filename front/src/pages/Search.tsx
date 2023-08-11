@@ -6,7 +6,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import LandmarkResult from '../components/LandmarkResult';
 import "../global.css";
 import { UserContext } from '../context/Context';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {LandmarkResultProps, LandmarkSearch} from '../interface/landmark';
 
 
@@ -18,8 +18,29 @@ const Search = () => {
     };
     const [landmark, setLandmark] = useState<LandmarkSearch>()
     const [nearByLandmarks, setNearByLandmarks] = useState<LandmarkSearch[]>([]);
+    const location = useLocation(); 
 
-    // 검색 버트 클릭했을 때
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        if (queryParams.get('reset')) {
+            localStorage.removeItem('landmark');
+            localStorage.removeItem('nearByLandmarks');
+            setLandmark(undefined);
+            setNearByLandmarks([]);
+        } else {
+            const storedLandmark = localStorage.getItem('landmark');
+            const storedNearByLandmarks = localStorage.getItem('nearByLandmarks');
+
+            if (storedLandmark) {
+                setLandmark(JSON.parse(storedLandmark));
+            }
+
+            if (storedNearByLandmarks) {
+                setNearByLandmarks(JSON.parse(storedNearByLandmarks));
+            }
+        }
+    }, [location.search]);
+    // 검색 버튼 클릭했을 때
     const handleImageUpload = async (file: File) => {
         try {
             const formData = new FormData();
@@ -27,6 +48,8 @@ const Search = () => {
             const response:LandmarkResultProps = await postData('/image', formData, config);
             await setLandmark(response.landmark);
             await setNearByLandmarks(response.nearByLandmarks);
+            localStorage.setItem('landmark', JSON.stringify(response.landmark));
+            localStorage.setItem('nearByLandmarks', JSON.stringify(response.nearByLandmarks));
         } catch (err) {
             console.log(err);
             alert(err);
@@ -42,9 +65,6 @@ const Search = () => {
     // 로그인된 유저 확인
     const navigate = useNavigate();
     const { userState, dispatch } = useContext(UserContext);
-    useEffect(() => {
-        console.log("User state updated:", userState);
-    }, [userState]);
 
     const handleLogin = () => {
         if (userState.accessToken) {

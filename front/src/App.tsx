@@ -31,7 +31,7 @@ function App() {
           />
           <span className="tooltip-text">마이</span>
         </a>
-        <a href="/">
+        <a href="/?reset=true">
           <img
             src="/public/images/LogoIcon.png"
             alt="여긴 어디 아이콘"
