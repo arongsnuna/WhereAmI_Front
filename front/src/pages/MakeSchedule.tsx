@@ -93,6 +93,9 @@ const MakeSchedule=()=>{
         }
     };
     const dates = startDate +', '+endDate;
+    const areFieldsFilled = () => {
+        return startDate && endDate && selectedImgPath.length > 0 && scheduleTitle;
+    };
 
     // api 보내기
     const token = localStorage.getItem('accessToken');
@@ -216,11 +219,14 @@ const MakeSchedule=()=>{
                     </div>
                 </div>
                 <div className='flex justify-center items-center'>
-                    <Button style={{ fontFamily: 'GmarketSansMedium' }}
-                        className="bg-cyan-300 text-gray-800 font-bold rounded text-xs sm:text-base"
-                        onClick={()=>makeScheduleApi()} disabled={isSaving}>
-                        {isSaving ? '일정 만드는 중...' : '일정 만들기'}
-                    </Button>
+                <Button 
+                    style={{ fontFamily: 'GmarketSansMedium' }}
+                    className="bg-cyan-300 text-gray-800 font-bold rounded text-xs sm:text-base"
+                    onClick={()=>makeScheduleApi()} 
+                    disabled={!areFieldsFilled() || isSaving}
+                >
+                    {isSaving ? '일정 만드는 중...' : '일정 만들기'}
+                </Button>
                 </div>
             </div>
             {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
@@ -231,11 +237,11 @@ const MakeSchedule=()=>{
                                 <Slider {...settings}>
                                     {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                         <figure 
-                                            className={`flex justify-center p-2 ${selectedImgIndices.includes(imgIndex) ? 'border-10 border-light-blue-500' : ''}`} 
+                                            className={`flex justify-center p-2 ${selectedImgIndices.includes(imgIndex) ? 'border-10 border-blue-500' : ''}`} 
                                             key={imgIndex}
                                         >
                                         <img
-                                            className={`w-full h-96 object-cover ${selectedImgPath.includes(`${item.siDo}-${bookmark.name}`) ? 'border-8 border-light-blue-400' : ''}`}
+                                            className={`w-full h-96 object-cover ${selectedImgPath.includes(`${item.siDo}-${bookmark.name}`) ? 'border-8 border-blue-400' : ''}`}
                                             onClick={() => handleImgClick(item.siDo, bookmark.name)}
                                             src={bookmark.imagePath}
                                         />
