@@ -1,19 +1,19 @@
 import "./global.css";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Search from './pages/Search';
-import LoginForm from './pages/LoginForm';
-import RegisterForm from './pages/RegisterForm';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Search from "./pages/Search";
+import LoginForm from "./pages/LoginForm";
+import RegisterForm from "./pages/RegisterForm";
 import MyPage from "./pages/MyPage";
 import Bookmarks from "./pages/Bookmarks";
 import SchedulerResult from "./pages/SchedulerResult";
 import UpdateMyPage from "./pages/UpdateMyPage";
 import MakeSchedule from "./pages/MakeSchedule";
-import ContextProvider from './context/Context';
+import ContextProvider from "./context/Context";
 import AllSchedule from "./pages/AllSchedule";
 
 function App() {
   const header = (
-    <header className="fixed bottom-0 flex justify-center bg-light-blue w-full p-2" >
+    <header className="fixed bottom-0 flex justify-center bg-light-blue w-full p-2">
       <nav className="flex justify-around items-center w-full space-x-2">
         <a href="/" className="tooltip">
           <img
@@ -59,27 +59,28 @@ function App() {
     </header>
   );
   return (
-    <div>
+    <div className="pb-16">
       <ContextProvider>
         <Router>
-            <Routes>
-              <Route path="/" element={<Search />} />
-              <Route path="/loginform" element={<LoginForm />} />
-              <Route path="/RegisterForm" element={<RegisterForm />} />
-              <Route path="/Mypage" element={<MyPage />} />
-              <Route path="/Bookmarks" element={<Bookmarks />} />
-              <Route path="/SchedulerResult/:schedulerId" element={<SchedulerResult />} />
-              <Route path="/UpdateMyPage" element={<UpdateMyPage />} />
-              <Route path="/MakeSchedule" element={<MakeSchedule />} />
-              <Route path="/AllSchedule" element={<AllSchedule />} />
-            </Routes>
+          <Routes>
+            <Route path="/" element={<Search />} />
+            <Route path="/loginform" element={<LoginForm />} />
+            <Route path="/RegisterForm" element={<RegisterForm />} />
+            <Route path="/Mypage" element={<MyPage />} />
+            <Route path="/Bookmarks" element={<Bookmarks />} />
+            <Route
+              path="/SchedulerResult/:schedulerId"
+              element={<SchedulerResult />}
+            />
+            <Route path="/UpdateMyPage" element={<UpdateMyPage />} />
+            <Route path="/MakeSchedule" element={<MakeSchedule />} />
+            <Route path="/AllSchedule" element={<AllSchedule />} />
+          </Routes>
         </Router>
-        <div  style={{ position: 'relative' }}>
-          {header}
-        </div>
+        <div style={{ position: "relative" }}>{header}</div>
       </ContextProvider>
     </div>
-  )
+  );
 }
 
 export default App;
