@@ -161,10 +161,10 @@ const MyPage=()=> {
                         <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>이름: {userName}</span>
                         </p>
                         <p className="mb-2 text-xs sm:text-base">
-                        <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>닉네임: {userName}</span>
+                            <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>이메일: {email}</span>
                         </p>
                         <p className="mb-2 text-xs sm:text-base">
-                            <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>이메일: {email}</span>
+                            <span className="font-bold" style={{fontFamily:'GmarketSansMedium'}}>자기소개: {description}</span>
                         </p>
                     </div>
                 </div>
@@ -196,8 +196,9 @@ const MyPage=()=> {
                             <Slider {...settings}>
                                 {Object.entries(schedule).map(([s,info])=>(
                                   <div key={s} className="flex justify-center p-2 text-xs sm:text-base" onClick={navigateAllSchedule}>
-                                    <figure className="flex justify-center p-2" style={{ maxHeight: '300px' }}>
-                                    <img src={info.imagePath} onClick={()=>handleSchedulerClick(info.schedulerId)} className='mb-2'/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>[{info.title}]</figcaption>
+                                    <figure>
+                                    <img src={info.imagePath} onClick={()=>handleSchedulerClick(info.schedulerId)}/><figcaption className='text-center' style={{fontFamily:'GmarketSansMedium'}}>[{info.title}]</figcaption>
+
                                     </figure>
                                   </div>
                                   ))
