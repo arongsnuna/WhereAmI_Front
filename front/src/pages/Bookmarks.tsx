@@ -53,13 +53,36 @@ const Bookmarks=()=>{
         arrow: null, // 이전 화살표를 숨김
         draggable : true, //드래그 가능 여부
         responsive: [ // 반응형 웹 구현 옵션
-					{
-						breakpoint: 768, //화면 사이즈 768px
-						settings: {
-							slidesToShow:2
-						}
-					}
-				]
+        {
+            breakpoint: 1620,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 4
+            }
+        },
+        {
+            breakpoint: 1200,
+            settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3
+            }
+        },
+        {
+            breakpoint: 900,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2
+            }
+        },
+        {
+            breakpoint: 767,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
+
     };
     return(
         <div>
@@ -77,14 +100,16 @@ const Bookmarks=()=>{
                 <>
                     {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                         bookmarkZip.map((item:any)=>(
-                            <div className="w-9/10 border border-gray-200 rounded m-2 justify-center text-bold" key={item.siDo}>
+                            <div className="w-9/10 border border-light-blue-200 rounded m-10 justify-center text-bold" key={item.siDo}>
                                 <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
-                                <div>
+                                <div className="h-[480px] overflow-hidden">
                                     <Slider {...settings}>
                                         {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                             <figure className="flex justify-center p-3" key={imgIndex}>
-                                                <img src={bookmark.imagePath} onClick={() => navigateBookmarksDetail(bookmark.name)}/>
-                                                <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>
+                                                <img src={bookmark.imagePath}
+                                                className="w-full h-96 object-cover"
+                                                onClick={() => navigateBookmarksDetail(bookmark.name)}/>
+                                                <figcaption className="truncate w-full text-center m-1" style={{ fontFamily: 'GmarketSansMedium' }}>
                                                     {bookmark.name}
                                                 </figcaption>
                                             </figure>
@@ -93,11 +118,15 @@ const Bookmarks=()=>{
                                 </div>
                             </div>
                         ))
-                    ):(<h1 style={{fontFamily: 'GangwonEduPowerExtraBoldA'}} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)
+                    ):( <h1 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='mt-8 mb-1 ml-3 text-center'>로딩중..</h1>)
                     }
                     {bookmarkZip &&  Object.keys(bookmarkZip).length>0 ?(
                         <div className='flex justify-center items-center'>
-                            <Button onClick={navigateMakeSchedule} className="mt-5">
+                            <Button
+                                onClick={navigateMakeSchedule}
+                                className="mt-5 border border-blue-200 text-2x1 px-8 text-bold"
+                                size="large"
+                            >
                                 일정 만들러가기
                             </Button>
                         </div>

@@ -22,6 +22,7 @@ interface ContextProviderProps {
 type LoginAction =
     | { type: 'LOGIN_SUCCESS'; payload: {id: string; accessToken: string} }
     | { type: 'LOGOUT' };
+const LOGIN_API_ROUTE = '/users/login';
 
 const initialState: UserState = {
     id:null,
@@ -57,7 +58,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }): React.Re
     }, []);
 
     const loginUser = useMutation<LoginResult, unknown, { username: string; password: string }>(
-        (data: { username: string; password: string }) => Api.postData<LoginResult>('/users/login', data),
+        (data: { username: string; password: string }) => Api.postData<LoginResult>(LOGIN_API_ROUTE, data),
         {
             onSuccess: (response: LoginResult) => {
                 const { id, accessToken } = response;
@@ -71,7 +72,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }): React.Re
                 console.log('%c 로그인 실패.', 'color: #d93d1a;');
             },
             onSettled: () => {
-                queryClient.invalidateQueries('/users/login');
+                queryClient.invalidateQueries(LOGIN_API_ROUTE);
             },
         }
     );
@@ -80,7 +81,8 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }): React.Re
         loginUser.mutate({ username, password });
     };
     const logout = () => {
-        localStorage.removeItem('user');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('id');
         dispatch({ type: 'LOGOUT' });
     };
 

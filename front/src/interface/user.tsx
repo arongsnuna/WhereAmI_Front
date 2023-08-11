@@ -3,6 +3,7 @@ export interface User{
     password:string;
     profilePath:string;
     description:string;
+    email: string;
     bookmarkCounts: {
         [location:string]:{
             imagePath:string;

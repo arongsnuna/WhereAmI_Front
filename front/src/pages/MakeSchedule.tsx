@@ -218,11 +218,12 @@ const MakeSchedule=()=>{
                 bookmarkZip.map((item:any)=>(
                         <div className="border border-gray-200 rounded m-2 justify-center text-bold" key={item.siDo}>
                             <h2 style={{ fontFamily: 'GangwonEduPowerExtraBoldA' }} className='m-3'>{item.siDo}</h2>
-                            <div>
+                            <div className="h-[480px] overflow-hidden">
                                 <Slider {...settings}>
                                     {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                         <figure className="flex justify-center p-2" key={imgIndex}>
                                             <img
+                                                className="w-full h-96 object-cover"
                                                 onClick={() => handleImgClick(imgIndex, bookmark.name)}
                                                 src={bookmark.imagePath}
                                             />
