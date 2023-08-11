@@ -26,9 +26,9 @@ const MakeSchedule=()=>{
         api.getData<BookmarkZip[]>(`/bookmarks/user`)
     );
     useEffect(() => {
-      if(!isLoading&&data) {
-        setBookmarkZip(data);
-      }
+        if(!isLoading&&data) {
+            setBookmarkZip(data);
+        }
     }, [data, isLoading]);
     const buttonText = userState.accessToken ? '로그아웃' : '로그인';
     const navigate = useNavigate();
@@ -45,22 +45,21 @@ const MakeSchedule=()=>{
 
     // img 클릭
     const [selectedImgPath, setSelectedImgPath] = useState<string[]>([]); // 추가된 부분
-    const [selectedImgIndices, setSelectedImgIndices] = useState<number[]>([]);
+    const [selectedImgIndices] = useState<number[]>([]);
 
 
-    const handleImgClick = (index: number, name: string) => {
-        if (selectedImgIndices.includes(index)) {
-            // 이미 클릭 되었을 경우, 리스트에 제외
-            setSelectedImgIndices(prevIndices => prevIndices.filter(i => i !== index));
-            setSelectedImgPath(prevPaths => prevPaths.filter(path => path !== name));
+    const handleImgClick = (district: string, name: string) => {
+        const uniqueId = `${district}-${name}`;
+        if (selectedImgPath.includes(uniqueId)) {
+            // 이미 클릭 했을 시, 제거
+            setSelectedImgPath(prevPaths => prevPaths.filter(path => path !== uniqueId));
         } else {
-            // If not selected, add to the list
-            setSelectedImgIndices(prevIndices => [...prevIndices, index]);
-            setSelectedImgPath(prevPaths => [...prevPaths, name]);
+            // 클릭 하지 않았을 시, 추가
+            setSelectedImgPath(prevPaths => [...prevPaths, uniqueId]);
         }
     };
-    
-    const selectedImgPathString = selectedImgPath.join(', ');
+    //이미지 선택시 하이라이트와 리스트 추가/제거
+    const selectedImgPathString = selectedImgPath.map(path => path.split('-')[1]).join(', ');
 
     // 캘린더 모달창
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false); // 모달의 가시성 상태
@@ -232,12 +231,12 @@ const MakeSchedule=()=>{
                                 <Slider {...settings}>
                                     {item.bookmarks.map((bookmark: any, imgIndex: number) => (
                                         <figure 
-                                            className={`flex justify-center p-2 ${selectedImgIndices.includes(imgIndex) ? 'border-2 border-light-blue-200' : ''}`} 
+                                            className={`flex justify-center p-2 ${selectedImgIndices.includes(imgIndex) ? 'border-10 border-light-blue-500' : ''}`} 
                                             key={imgIndex}
                                         >
                                         <img
-                                            className="w-full h-96 object-cover"
-                                            onClick={() => handleImgClick(imgIndex, bookmark.name)}
+                                            className={`w-full h-96 object-cover ${selectedImgPath.includes(`${item.siDo}-${bookmark.name}`) ? 'border-8 border-light-blue-400' : ''}`}
+                                            onClick={() => handleImgClick(item.siDo, bookmark.name)}
                                             src={bookmark.imagePath}
                                         />
                                         <figcaption style={{ fontFamily: 'GmarketSansMedium' }} className='text-center m-1'>

@@ -12,7 +12,6 @@ import ContextProvider from "./context/Context";
 import AllSchedule from "./pages/AllSchedule";
 import BookmarksDetail from "./pages/BookmarksDetail";
 
-import Heart from './assets/Heart.png';
 import Like from './assets/Like.png';
 import magnifying from './assets/magnifying2.png';
 import schedule from './assets/schedules2.png';
